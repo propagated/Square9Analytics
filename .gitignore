@@ -3,4 +3,10 @@
 Square9Analytics/bin
 Square9Analytics/obj
 Square9Analytics/Web.config
+Square9Analytics.Logic/bin
+Square9Analytics.Logic/obj
+Square9Analytics.DataAccess/bin
+Square9Analytics.DataAccess/obj
+Square9Analytics.Objects/bin
+Square9Analytics.Objects/obj
 packages
