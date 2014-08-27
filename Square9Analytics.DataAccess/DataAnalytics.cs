@@ -11,7 +11,7 @@ namespace Square9Analytics.DataAccess
 {
     public class DataAnalytics
     {
-        public int getActionCount(DateTime startDate, DateTime endDate, String action)
+        public int getActionCount(DateTime startDate, DateTime endDate, AuditEntry action)
         {
             int actionCount = 0;
             using (SqlConnection sqlConnection = new SqlConnection("Data Source=(local)\\GETSMART;Initial Catalog=SmartSearch;Integrated Security=SSPI;MultipleActiveResultSets=true"))
