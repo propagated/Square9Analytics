@@ -2,7 +2,7 @@
 *.user
 Square9Analytics.API/bin
 Square9Analytics.API/obj
-Square9Analytics/Web.config
+Square9Analytics.API/Web.config
 Square9Analytics.Logic/bin
 Square9Analytics.Logic/obj
 Square9Analytics.DataAccess/bin
