@@ -21,11 +21,14 @@ namespace Square9Analytics.Logic
 
                 TimeSpan diff = endDate.Subtract(startDate);
 
-                if (iCount >= diff.Days)
+                //can't divide by zero
+                if (diff.Days != 0)
                 {
-                    iReturn = iCount / diff.Days;
+                    if (iCount >= diff.Days)
+                    {
+                        iReturn = iCount / diff.Days;
+                    }
                 }
-
             }
 
             return iReturn;
