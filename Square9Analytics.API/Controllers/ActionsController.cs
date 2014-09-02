@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Square9Analytics.Logic;
+using Square9Analytics.Objects;
 
 namespace Square9Analytics.Controllers
 {
@@ -16,6 +18,37 @@ namespace Square9Analytics.Controllers
         public HttpResponseMessage GetSomething()
         {
             return Request.CreateResponse(HttpStatusCode.OK, "Hello World");
+        }
+
+        public HttpResponseMessage GetDocsByDay(string startdate, string endDate)
+        {
+                Analytics getNumOfDocs = new Analytics();
+                DateTime StartdateValue;
+                DateTime EnddateValue;
+                //validates the start date string as a date
+
+                if (DateTime.TryParse(startdate, out StartdateValue))
+                {
+                //validates the end date string as a date
+                    if (DateTime.TryParse(endDate, out EnddateValue))
+                    {
+
+                        getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
+                        return Request.CreateResponse(HttpStatusCode.OK, "Correctly entered if statement with valid date and the number of documents indexed is " + getNumOfDocs);
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid end date please enter dates in the following format: mm/dd/yyyy");
+                    }
+
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid start date please enter dates in the following format: mm/dd/yyyy");
+            }
+
+
+
         }
 
         // POST api/actions
