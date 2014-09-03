@@ -22,7 +22,7 @@ namespace Square9Analytics.Controllers
 
         public HttpResponseMessage GetDocsByDay(string startdate, string endDate)
         {
-                Analytics getNumOfDocs = new Analytics();
+                //----->Analytics getNumOfDocs = new Analytics();
                 DateTime StartdateValue;
                 DateTime EnddateValue;
                 //validates the start date string as a date
@@ -33,8 +33,9 @@ namespace Square9Analytics.Controllers
                     if (DateTime.TryParse(endDate, out EnddateValue))
                     {
 
-                        getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
-                        return Request.CreateResponse(HttpStatusCode.OK, "Correctly entered if statement with valid date and the number of documents indexed is " + getNumOfDocs);
+                        //----->getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
+                        //----->return Request.CreateResponse(HttpStatusCode.OK, "Correctly entered if statement with valid date and the number of documents indexed is " + getNumOfDocs);
+                        return Request.CreateResponse(HttpStatusCode.OK, "startdate = " + StartdateValue + " and endDate = " + EnddateValue);
                     }
                     else
                     {
