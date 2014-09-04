@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <link data-require="bootstrap-css@3.1.1" data-semver="3.1.1" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+    <script data-require="d3@*" data-semver="3.4.6" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.6/d3.min.js"></script>
+    <script data-require="jquery@*" data-semver="2.1.1" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script data-require="bootstrap@*" data-semver="3.1.1" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="moment.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+    <script src="daterangepicker.js"></script>
+    <link rel="stylesheet" href="daterangepicker-bs3.css" />
+  </head>
+
+  <body>
+    <!-- Graph goes here -->
+    <div class="chart">
+    </div>
+    <br />
+    <form>
+      <div class="form-group">
+        <label for="auditlogdates">Audit Log Dates:</label>
+        <div class="input-group">
+          <span class="input-group-addon">
+            <i class="fa fa-calendar"></i>
+          </span>
+          <input type="text" name="auditlog" id="auditlogdates" class="form-control" value="" />
+        </div>
+      </div>
+    </form>
+    <div class="wellLabel">Actions:</div>
+    <div class="well">
+      <!-- Checkboxes for audit actions here -->
+      <div>
+        <input type="checkbox" id="indexed" name="chk_indexed" value="" checked="" />
+        <label for="chk_1" class="actionLabel">Documents Indexed</label>
+      </div>
+      <div>
+        <input type="checkbox" id="chk_2" name="chk_2" value="Modify" />
+        <label for="chk_2" class="actionLabel">Workflows Ran</label>
+      </div>
+      <!-- <div><input type="checkbox" id="chk_3" name="chk_3" value="Delete"/><label for="chk_3" class="actionLabel">Delete</label></div>
+    <div><input type="checkbox" id="chk_4" name="chk_4" value="Move"/><label for="chk_4" class="actionLabel">Move</label></div>
+    <div><input type="checkbox" id="chk_5" name="chk_5" value="Index"/><label for="chk_5" class="actionLabel">Index</label></div>
+     -->
+    </div>
+    <div>
+      <button type="button" id="buttonGet" class="btn btn-success" >Eat it</button>
+    </div>
+  </body>
+
+</html>
