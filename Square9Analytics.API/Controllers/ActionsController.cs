@@ -15,41 +15,40 @@ namespace Square9Analytics.Controllers
     public class ActionsController : AnalyticsController
     {
         // GET api/actions
+        [ActionName("hello")]
         public HttpResponseMessage GetSomething()
         {
             return Request.CreateResponse(HttpStatusCode.OK, 7);
         }
 
+        [ActionName("indexed")]
         public HttpResponseMessage GetDocsByDay(string startdate, string endDate)
         {
-                Analytics getNumOfDocs = new Analytics();
-                DateTime StartdateValue;
-                DateTime EnddateValue;
-                //validates the start date string as a date
+            Analytics getNumOfDocs = new Analytics();
+            DateTime StartdateValue;
+            DateTime EnddateValue;
+            //validates the start date string as a date
 
-                if (DateTime.TryParse(startdate, out StartdateValue))
+            if (DateTime.TryParse(startdate, out StartdateValue))
+            {
+            //validates the end date string as a date
+                if (DateTime.TryParse(endDate, out EnddateValue))
                 {
-                //validates the end date string as a date
-                    if (DateTime.TryParse(endDate, out EnddateValue))
-                    {
+                    Int32 docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
 
-                        getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
-                        return Request.CreateResponse(HttpStatusCode.OK, "Correctly entered if statement with valid date and the number of documents indexed is " + getNumOfDocs);
-                        //----->return Request.CreateResponse(HttpStatusCode.OK, "startdate = " + StartdateValue + " and endDate = " + EnddateValue);
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid end date please enter dates in the following format: mm/dd/yyyy");
-                    }
+                    return Request.CreateResponse(HttpStatusCode.OK, docCount);
+                    //----->return Request.CreateResponse(HttpStatusCode.OK, "startdate = " + StartdateValue + " and endDate = " + EnddateValue);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid end date please enter dates in the following format: mm/dd/yyyy");
+                }
 
             }
             else
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid start date please enter dates in the following format: mm/dd/yyyy");
             }
-
-
-
         }
 
         // POST api/actions

@@ -17,7 +17,7 @@ $(function() {
 
   });
 
-  var data = [4];
+  var data = [7];
 
   chartData(data);
 });
@@ -27,7 +27,7 @@ function getData() {
   //hit API
   $.ajax({
     type: "GET",
-    url: 'http://localhost/square9analytics/analytics/Actions',
+    url: 'http://localhost/square9analytics/analytics/Actions?startdate=9/1/2013&enddate=9/1/2014',
     success: function(data) {
       chartData(data);
       },
