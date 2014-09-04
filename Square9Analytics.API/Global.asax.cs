@@ -11,6 +11,8 @@ namespace Square9Analytics
     {
         protected void Application_Start()
         {
+            //RouteTable for building endpoints. {parameter} can denote parameters in the URL. Otherwise controller endpoints
+            //contain the URI parameters.
             RouteTable.Routes.MapHttpRoute("Users", "analytics/users", new { controller = "Users" });
             RouteTable.Routes.MapHttpRoute("Actions", "analytics/actions", new { controller = "Actions" });
         }

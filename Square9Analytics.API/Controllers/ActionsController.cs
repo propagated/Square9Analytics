@@ -17,7 +17,7 @@ namespace Square9Analytics.Controllers
         // GET api/actions
         public HttpResponseMessage GetSomething()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, "Hello World");
+            return Request.CreateResponse(HttpStatusCode.OK, 7);
         }
 
         public HttpResponseMessage GetDocsByDay(string startdate, string endDate)
