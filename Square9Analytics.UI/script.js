@@ -27,7 +27,7 @@ function getData() {
   //hit API
   $.ajax({
     type: "GET",
-    url: 'http://localhost/square9analytics/analytics/Actions?startdate=9/1/2013&enddate=9/1/2014',
+    url: 'http://localhost/square9analytics/analytics/Actions/?startdate=9/1/2013&enddate=9/1/2014',
     success: function(data) {
       chartData(data);
       },
