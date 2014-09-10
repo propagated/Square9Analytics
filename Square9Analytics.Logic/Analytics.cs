@@ -27,6 +27,7 @@ namespace Square9Analytics.Logic
                 {
                     // Did this change happen?!?!?!
                     // Changes #2
+                    // Change #3
                     iReturn = iCount / diff.Days;
                 }
             }
