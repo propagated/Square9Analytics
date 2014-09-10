@@ -27,27 +27,17 @@ namespace Square9Analytics.Controllers
             Analytics getNumOfDocs = new Analytics();
             DateTime StartdateValue;
             DateTime EnddateValue;
-            //validates the start date string as a date
 
-            if (DateTime.TryParse(startdate, out StartdateValue))
+            //Validates the startdate and endDate strings as a dates
+            if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
             {
-            //validates the end date string as a date
-                if (DateTime.TryParse(endDate, out EnddateValue))
-                {
-                    Int32 docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
+                Int32 docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
 
-                    return Request.CreateResponse(HttpStatusCode.OK, docCount);
-                    //----->return Request.CreateResponse(HttpStatusCode.OK, "startdate = " + StartdateValue + " and endDate = " + EnddateValue);
-                }
-                else
-                {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid end date please enter dates in the following format: mm/dd/yyyy");
-                }
-
+                return Request.CreateResponse(HttpStatusCode.OK, docCount);
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid start date please enter dates in the following format: mm/dd/yyyy");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
             }
         }
 
