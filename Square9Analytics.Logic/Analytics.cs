@@ -22,18 +22,17 @@ namespace Square9Analytics.Logic
                 TimeSpan diff = endDate.Subtract(startDate);
 
                 //can't divide by zero
+                //Removed day>count check for future change to data type to allow decimals
                 if (diff.Days != 0)
-                {
-                    if (iCount >= diff.Days)
                     {
                         iReturn = iCount / diff.Days;
                     }
-                }
             }
-
+            else
+            {
+                throw new Exception("Current Date Range is invalid, End Date needs to be greater than Start Date");
+            }
             return iReturn;
-        }
-
-       
+        }     
     }
 }
