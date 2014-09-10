@@ -25,9 +25,6 @@ namespace Square9Analytics.Logic
                 //Removed day>count check for future change to data type to allow decimals
                 if (diff.Days != 0)
                 {
-                    // Did this change happen?!?!?!
-                    // Changes #2
-                    // Change #3
                     iReturn = iCount / diff.Days;
                 }
             }
