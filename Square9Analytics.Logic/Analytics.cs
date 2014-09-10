@@ -24,9 +24,10 @@ namespace Square9Analytics.Logic
                 //can't divide by zero
                 //Removed day>count check for future change to data type to allow decimals
                 if (diff.Days != 0)
-                    {
-                        iReturn = iCount / diff.Days;
-                    }
+                {
+                   // Did this change happen?!?!?! 
+                   iReturn = iCount / diff.Days;
+                }
             }
             else
             {
