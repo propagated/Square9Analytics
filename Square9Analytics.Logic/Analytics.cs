@@ -9,15 +9,16 @@ namespace Square9Analytics.Logic
 {
     public class Analytics
     {
-        public Int32 getActionCount(DateTime startDate, DateTime endDate, AuditEntry action)
+        // Changing the Return type of this function to Float for more accuracy - Jon H. 9/11
+        public float getActionCount(DateTime startDate, DateTime endDate, AuditEntry action)
         {
-            Int32 iReturn = 0;
+            float iReturn = 0.0f;
 
             if (startDate < endDate)
             {
                 DataAccess.DataAnalytics da = new DataAccess.DataAnalytics();
 
-                Int32 iCount = da.getActionCount(startDate, endDate, action);
+                float iCount = da.getActionCount(startDate, endDate, action);
 
                 TimeSpan diff = endDate.Subtract(startDate);
 
