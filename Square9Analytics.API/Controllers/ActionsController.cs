@@ -15,49 +15,63 @@ namespace Square9Analytics.Controllers
     public class ActionsController : AnalyticsController
     {
         // GET api/actions
-        [ActionName("hello")]
-        public HttpResponseMessage GetSomething()
+        [ActionName("Hello")]
+        public HttpResponseMessage newGetSomething()
         {
             return Request.CreateResponse(HttpStatusCode.OK, 7);
         }
 
-        [ActionName("indexed")]
+        [ActionName("Indexed")]
         public HttpResponseMessage GetDocsByDay(string startdate, string endDate)
         {
-            Analytics getNumOfDocs = new Analytics();
-            DateTime StartdateValue;
-            DateTime EnddateValue;
-
-            //Validates the startdate and endDate strings as a dates
-            if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
+            try
             {
-                Int32 docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
+                Analytics getNumOfDocs = new Analytics();
+                DateTime StartdateValue;
+                DateTime EnddateValue;
 
-                return Request.CreateResponse(HttpStatusCode.OK, docCount);
+                //Validates the startdate and endDate strings as a dates
+                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
+                {
+                    Int32 docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
+
+                    return Request.CreateResponse(HttpStatusCode.OK, docCount);
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
+                }
             }
-            else
+            catch (Exception)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something bad happened.");
             }
         }
 
         [ActionName("Workflow")]
         public HttpResponseMessage GetWorkflows(string startdate, string endDate)
         {
-            Analytics getNumOfWorkflows = new Analytics();
-            DateTime StartdateValue;
-            DateTime EnddateValue;
-
-            //Validates the startdate and endDate strings as a dates
-            if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
+            try
             {
-                Int32 workflowCount = getNumOfWorkflows.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
+                Analytics getNumOfWorkflows = new Analytics();
+                DateTime StartdateValue;
+                DateTime EnddateValue;
 
-                return Request.CreateResponse(HttpStatusCode.OK, workflowCount);
+                //Validates the startdate and endDate strings as a dates
+                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
+                {
+                    Int32 workflowCount = getNumOfWorkflows.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
+
+                    return Request.CreateResponse(HttpStatusCode.OK, workflowCount);
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
+                }
             }
-            else
+            catch (Exception)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something bad happened.");
             }
         }
 
