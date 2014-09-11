@@ -15,9 +15,9 @@ namespace Square9Analytics.Controllers
     public class AnalyticsController : ApiController
     {
         // GET api/users
-        public HttpResponseMessage GetSomething()
+        public HttpResponseMessage Get()
         {
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.OK, "Retrieved");
         }
     }
 }
