@@ -16,7 +16,7 @@ namespace Square9Analytics.Controllers
     {
         // GET api/actions
         [ActionName("Hello")]
-        public HttpResponseMessage newGetSomething()
+        public HttpResponseMessage GetSomething()
         {
             return Request.CreateResponse(HttpStatusCode.OK, 7);
         }
