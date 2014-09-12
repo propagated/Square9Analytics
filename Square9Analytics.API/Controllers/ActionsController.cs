@@ -11,6 +11,7 @@ namespace Square9Analytics.Controllers
 {
     /// <summary>
     /// API Endpoint for action-based analytics data requests.
+    /// 9/12/2014 11:28 am save point
     /// </summary>
     public class ActionsController : AnalyticsController
     {
@@ -33,7 +34,7 @@ namespace Square9Analytics.Controllers
                 //Validates the startdate and endDate strings as a dates
                 if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
                 {
-                    Int32 docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
+                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
 
                     return Request.CreateResponse(HttpStatusCode.OK, docCount);
                 }
@@ -48,7 +49,7 @@ namespace Square9Analytics.Controllers
             }
         }
 
-        [ActionName("Workflow")]
+        [ActionName("Workflows")]
         public HttpResponseMessage GetWorkflows(string startdate, string endDate)
         {
             try
@@ -60,7 +61,7 @@ namespace Square9Analytics.Controllers
                 //Validates the startdate and endDate strings as a dates
                 if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
                 {
-                    Int32 workflowCount = getNumOfWorkflows.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
+                    float workflowCount = getNumOfWorkflows.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
 
                     return Request.CreateResponse(HttpStatusCode.OK, workflowCount);
                 }
