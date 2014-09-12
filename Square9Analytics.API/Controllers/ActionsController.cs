@@ -15,39 +15,63 @@ namespace Square9Analytics.Controllers
     public class ActionsController : AnalyticsController
     {
         // GET api/actions
-        [ActionName("hello")]
+        [ActionName("Hello")]
         public HttpResponseMessage GetSomething()
         {
             return Request.CreateResponse(HttpStatusCode.OK, 7);
         }
 
-        [ActionName("indexed")]
+        [ActionName("Indexed")]
         public HttpResponseMessage GetDocsByDay(string startdate, string endDate)
         {
-            Analytics getNumOfDocs = new Analytics();
-            DateTime StartdateValue;
-            DateTime EnddateValue;
-            //validates the start date string as a date
-
-            if (DateTime.TryParse(startdate, out StartdateValue))
+            try
             {
-            //validates the end date string as a date
-                if (DateTime.TryParse(endDate, out EnddateValue))
+                Analytics getNumOfDocs = new Analytics();
+                DateTime StartdateValue;
+                DateTime EnddateValue;
+
+                //Validates the startdate and endDate strings as a dates
+                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
                 {
-                    Int32 docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
+                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
 
                     return Request.CreateResponse(HttpStatusCode.OK, docCount);
-                    //----->return Request.CreateResponse(HttpStatusCode.OK, "startdate = " + StartdateValue + " and endDate = " + EnddateValue);
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid end date please enter dates in the following format: mm/dd/yyyy");
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
                 }
-
             }
-            else
+            catch (Exception)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid start date please enter dates in the following format: mm/dd/yyyy");
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something bad happened.");
+            }
+        }
+
+        [ActionName("Workflows")]
+        public HttpResponseMessage GetWorkflows(string startdate, string endDate)
+        {
+            try
+            {
+                Analytics getNumOfWorkflows = new Analytics();
+                DateTime StartdateValue;
+                DateTime EnddateValue;
+
+                //Validates the startdate and endDate strings as a dates
+                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
+                {
+                    float workflowCount = getNumOfWorkflows.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
+
+                    return Request.CreateResponse(HttpStatusCode.OK, workflowCount);
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
+                }
+            }
+            catch (Exception)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something bad happened.");
             }
         }
 
