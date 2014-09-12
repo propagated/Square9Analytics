@@ -44,12 +44,11 @@ namespace Square9Analytics.Controllers
             }
             catch (Exception)
             {
-<<<<<<< HEAD
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something bad happened.");
             }
         }
 
-        [ActionName("Workflow")]
+        [ActionName("Workflows")]
         public HttpResponseMessage GetWorkflows(string startdate, string endDate)
         {
             try
@@ -73,9 +72,6 @@ namespace Square9Analytics.Controllers
             catch (Exception)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something bad happened.");
-=======
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
->>>>>>> parent of 6f6d902... Added Workflow Action
             }
         }
 
