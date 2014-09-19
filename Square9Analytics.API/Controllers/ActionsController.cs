@@ -34,7 +34,7 @@ namespace Square9Analytics.Controllers
                 //Validates the startdate and endDate strings as a dates
                 if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
                 {
-                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
+                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.Indexed); //need the object to pass startdate and enddate to
 
                     return Request.CreateResponse(HttpStatusCode.OK, docCount);
                 }
@@ -61,7 +61,7 @@ namespace Square9Analytics.Controllers
                 //Validates the startdate and endDate strings as a dates
                 if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
                 {
-                    float workflowCount = getNumOfWorkflows.getActionCount(StartdateValue, EnddateValue, AuditEntry.DocumentIndexed); //need the object to pass startdate and enddate to
+                    float workflowCount = getNumOfWorkflows.getActionCount(StartdateValue, EnddateValue, AuditEntry.Indexed); //need the object to pass startdate and enddate to
 
                     return Request.CreateResponse(HttpStatusCode.OK, workflowCount);
                 }
