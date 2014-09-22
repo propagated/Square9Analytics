@@ -11,7 +11,7 @@ namespace Square9Analytics.Controllers
 {
     /// <summary>
     /// API Endpoint for action-based analytics data requests.
-    /// 9/12/2014 11:28 am save point
+    /// 9/22/2014 1:21 pm save point
     /// </summary>
     public class ActionsController : AnalyticsController
     {
@@ -43,9 +43,9 @@ namespace Square9Analytics.Controllers
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something bad happened.");
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
             }
         }
 
@@ -70,9 +70,9 @@ namespace Square9Analytics.Controllers
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Something bad happened.");
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
             }
         }
 
