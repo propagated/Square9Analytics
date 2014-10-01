@@ -31,7 +31,7 @@ namespace Square9Analytics.DataAccess
                 sqlConnection.Close();
 
             }
-           return actionCount; 
+            return actionCount;
         }
     }
 }
