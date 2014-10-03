@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Square9Analytics.Objects
 {
-    // To be able to store the data from a table
+    // The object that will store the data from DA
     public class DataObject
     {
         public int ID { get; set; }
