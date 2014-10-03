@@ -55,7 +55,9 @@ namespace Square9Analytics.Logic
             DataTable dataTable = new DataTable();
 
             // This is just something temporary while I wait to get the function name that DA is using (if it's different)
-            dataTable = da.getActionTable(startDate, endDate, action);
+            // This function is not 100% functional or tested until I can get data back from DA
+            
+            //dataTable = da.getActionTable( startDate, endDate, action );
 
             // Parse through the temp variable and store it into the list object
             foreach( DataRow dr in dataTable.Rows )
