@@ -38,7 +38,7 @@ namespace Square9Analytics.Logic
             }
             else
             {
-                
+
                 throw new Exception("Current Date Range is invalid, End Date needs to be greater than Start Date");
             }
             return fReturn;
