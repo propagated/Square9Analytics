@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 using Square9Analytics.Objects;
 
 namespace Square9Analytics.Logic
@@ -33,17 +34,14 @@ namespace Square9Analytics.Logic
                     // New exception added in here for the next layer of checking - Jon H. 9/12
                     // Once the exception has been hit, going to set iReturn to 0 and break out of function
                     throw new Exception("The difference in days is less than 0");
-                    return iReturn;
                 }
             }
             else
             {
                 
                 throw new Exception("Current Date Range is invalid, End Date needs to be greater than Start Date");
-                return iReturn;
             }
             return iReturn;
-<<<<<<< HEAD
         }    
 
         // New function to be able to return an object so that API can parse through it and display data
@@ -69,9 +67,6 @@ namespace Square9Analytics.Logic
             
             // Once the DataTable is parsed through, be able to return the list object up
             return objectList;
-        }
-=======
-        }     
->>>>>>> parent of f0f944a... Adding in new function and new object
+        }    
     }
 }
