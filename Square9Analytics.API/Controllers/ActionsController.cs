@@ -52,34 +52,6 @@ namespace Square9Analytics.Controllers
         }
 
         [ActionName("Indexed")]
-        public HttpResponseMessage GetDocsByDay(string startdate, string endDate, string username)
-        {
-            try
-            {
-                Analytics getNumOfDocs = new Analytics();
-                DateTime StartdateValue;
-                DateTime EnddateValue;
-
-                //Validates the startdate and endDate strings as a dates
-                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
-                {
-                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditEntry.Indexed); //need the object to pass startdate and enddate to
-
-                    //return Request.CreateResponse(HttpStatusCode.OK, docCount);
-                    return Request.CreateResponse(HttpStatusCode.OK, username + " has been accepted.");
-                }
-                else
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-        }
-
-        [ActionName("Indexed")]
         public HttpResponseMessage GetDocsByDay(string startdate, string endDate)
         {
             try
@@ -107,34 +79,6 @@ namespace Square9Analytics.Controllers
         }
 
         //TEST USERNAME ROUTE (WORKFLOWS)
-        [ActionName("Workflows")]
-        public HttpResponseMessage GetWorkflows(string startdate, string endDate, string username)
-        {
-            try
-            {
-                Analytics getNumOfWorkflows = new Analytics();
-                DateTime StartdateValue;
-                DateTime EnddateValue;
-
-                //Validates the startdate and endDate strings as a dates
-                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
-                {
-                    float workflowCount = getNumOfWorkflows.getActionCount(StartdateValue, EnddateValue, AuditEntry.Indexed); //need the object to pass startdate and enddate to
-
-                    //return Request.CreateResponse(HttpStatusCode.OK, workflowCount);
-                    return Request.CreateResponse(HttpStatusCode.OK, username + " has been accepted.");
-                }
-                else
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-        }
-
         [ActionName("Workflows")]
         public HttpResponseMessage GetWorkflows(string startdate, string endDate, string username)
         {
