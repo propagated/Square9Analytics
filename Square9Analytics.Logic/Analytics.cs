@@ -11,7 +11,7 @@ namespace Square9Analytics.Logic
     {
         // Changing the Return type of this function to Float for more accuracy - Jon H. 9/11
         // Changed variable names due to the change from int to Float
-        public float getActionCount(DateTime startDate, DateTime endDate, AuditEntry action)
+        public float getActionCount(DateTime startDate, DateTime endDate, AuditAction action)
         {
             float fReturn = 0.0f;
 
