@@ -36,9 +36,7 @@ namespace Square9Analytics.Objects
         public static AuditAction Emailed { get { return new AuditAction("Document Emailed"); } }
         public static AuditAction Printed { get { return new AuditAction("Document Printed"); } }
         public static AuditAction Deleted { get { return new AuditAction("Document Deleted"); } }
-
-        
-        
+        public static AuditAction Viewed { get { return new AuditAction("Document Viewed"); } }
     }
 }
 
