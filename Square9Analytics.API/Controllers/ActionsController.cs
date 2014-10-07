@@ -35,7 +35,9 @@ namespace Square9Analytics.Controllers
                 if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
                 {
                     float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.Indexed); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(StartdateValue, EnddateValue, AuditAction.Indexed, username);
+                    //AuditLog DataReturn = new AuditLog(Jonsfunction(startdate, enddate, actions, users));
+
+                    //system.json.serialize(DataReturn);
 
                     //return Request.CreateResponse(HttpStatusCode.OK, docCount);
                     return Request.CreateResponse(HttpStatusCode.OK, username + " has been accepted.");
@@ -54,6 +56,7 @@ namespace Square9Analytics.Controllers
         [ActionName("Indexed")]
         public HttpResponseMessage GetDocsByDay(string startdate, string endDate)
         {
+
             try
             {
                 Analytics getNumOfDocs = new Analytics();
