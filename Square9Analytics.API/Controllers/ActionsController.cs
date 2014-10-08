@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Square9Analytics.Logic;
 using Square9Analytics.Objects;
+using Newtonsoft.Json;
 
 namespace Square9Analytics.Controllers
 {
@@ -37,7 +38,7 @@ namespace Square9Analytics.Controllers
                     float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.Indexed); //need the object to pass startdate and enddate to
                     //AuditLog DataReturn = new AuditLog(Jonsfunction(startdate, enddate, actions, users));
 
-                    //system.json.serialize(DataReturn);
+                    //JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
 
                     //return Request.CreateResponse(HttpStatusCode.OK, docCount);
                     return Request.CreateResponse(HttpStatusCode.OK, username + " has been accepted.");
