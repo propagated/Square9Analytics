@@ -68,9 +68,11 @@ namespace Square9Analytics.Controllers
                 if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
                 {
                     float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.Indexed); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(StartdateValue, EnddateValue, AuditAction.Indexed);
+                    //AuditLog DataReturn = new AuditLog(getAuditLog(startdate,endDate, AuditAction.Indexed));
 
-                    return Request.CreateResponse(HttpStatusCode.OK, docCount);
+                    //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
+
+                    return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
                 }
                 else
                 {
