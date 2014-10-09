@@ -36,11 +36,11 @@ namespace Square9Analytics.Controllers
                 if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
                 {
                     float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.Indexed); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(Jonsfunction(startdate, enddate, actions, users));
+                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, AuditAction.Indexed, username));
 
-                    //JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
+                    //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
 
-                    //return Request.CreateResponse(HttpStatusCode.OK, docCount);
+                    //return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
                     return Request.CreateResponse(HttpStatusCode.OK, username + " has been accepted.");
                 }
                 else
@@ -68,7 +68,7 @@ namespace Square9Analytics.Controllers
                 if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
                 {
                     float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.Indexed); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(getAuditLog(startdate,endDate, AuditAction.Indexed));
+                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, AuditAction.Indexed));
 
                     //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
 
