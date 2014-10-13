@@ -15,6 +15,8 @@ namespace Square9Analytics.Controllers
     /// </summary>
     public class ActionsController : AnalyticsController
     {
+
+
         // GET api/actions
         [ActionName("Hello")]
         public HttpResponseMessage GetSomething()
@@ -23,9 +25,9 @@ namespace Square9Analytics.Controllers
         }
 
 
-        //Indexed Route
-        [ActionName("Indexed")]
-        public HttpResponseMessage GetIndexed(string startdate, string endDate, string username)
+        //Actions Route
+        [ActionName("GetData")]
+        public HttpResponseMessage GetData(string startdate, string endDate, string action, string username = "")
         {
             try
             {
@@ -36,13 +38,55 @@ namespace Square9Analytics.Controllers
                 //Validates the startdate and endDate strings as a dates
                 if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
                 {
-                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.Indexed); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, AuditAction.Indexed, username));
+                    AuditAction InputAction = AuditAction.Indexed;
+                    switch (action.ToLower())
+                    {
+                        case "indexed":
+                            InputAction = AuditAction.Indexed;
+                            break;
+                        case "annotationupdate":
+                            InputAction = AuditAction.AnnotationUpdate;
+                            break;
+                        case "emailed":
+                            InputAction = AuditAction.Emailed;
+                            break;
+                        case "printed":
+                            InputAction = AuditAction.Printed;
+                            break;
+                        case "deleted":
+                            InputAction = AuditAction.Deleted;
+                            break;
+                        case "viewed":
+                            InputAction = AuditAction.Viewed;
+                            break;
+                        case "overthrowpete":
+                            Random rnd = new Random();
+                            int OverThrown = rnd.Next(1, 11);
+                            if (OverThrown == 10)
+                            {
+                                return Request.CreateErrorResponse(HttpStatusCode.OK, "You successfully took Pete's throne!");
+                            }
+                            else
+                            {
+                                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Your attempt to overthrow Pete was in vain.");
+                            }
+                        default:
+                            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid action was entered.");
+                    }
+
+                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, InputAction); //need the object to pass startdate and enddate to
+                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, InputAction, username));
 
                     //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
 
-                    //return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
-                    return Request.CreateResponse(HttpStatusCode.OK, username + " has been accepted.");
+                    if (username == "")
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, username + " has been accepted.");
+                    }
                 }
                 else
                 {
@@ -54,353 +98,6 @@ namespace Square9Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
             }
         }
-
-        [ActionName("Indexed")]
-        public HttpResponseMessage GetIndexed(string startdate, string endDate)
-        {
-
-            try
-            {
-                Analytics getNumOfDocs = new Analytics(); //DEPRICATED
-                DateTime StartdateValue;
-                DateTime EnddateValue;
-
-                //Validates the startdate and endDate strings as a dates
-                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
-                {
-                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.Indexed); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, AuditAction.Indexed));
-
-                    //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
-
-                    return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
-                }
-                else
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-        }
-
-
-        //AnnotationUpdate Route
-        [ActionName("AnnotationUpdate")]
-        public HttpResponseMessage GetAnnotations(string startdate, string endDate, string username)
-        {
-            try
-            {
-                Analytics getNumOfDocs = new Analytics(); //DEPRICATED
-                DateTime StartdateValue;
-                DateTime EnddateValue;
-
-                //Validates the startdate and endDate strings as a dates
-                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
-                {
-                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.AnnotationUpdate); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, AuditAction.AnnotationUpdate, username));
-
-                    //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
-
-                    //return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
-                    return Request.CreateResponse(HttpStatusCode.OK, username + " has been accepted.");
-                }
-                else
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-        }
-
-        [ActionName("AnnotationUpdate")]
-        public HttpResponseMessage GetAnnotations(string startdate, string endDate)
-        {
-            try
-            {
-                Analytics getNumOfDocs = new Analytics(); //DEPRICATED
-                DateTime StartdateValue;
-                DateTime EnddateValue;
-
-                //Validates the startdate and endDate strings as a dates
-                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
-                {
-                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.AnnotationUpdate); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, AuditAction.AnnotationUpdate));
-
-                    //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
-
-                    return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
-                }
-                else
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-        }
-
-
-        //Emailed Route
-        [ActionName("Emailed")]
-        public HttpResponseMessage GetEmailed(string startdate, string endDate, string username)
-        {
-            try
-            {
-                Analytics getNumOfDocs = new Analytics(); //DEPRICATED
-                DateTime StartdateValue;
-                DateTime EnddateValue;
-
-                //Validates the startdate and endDate strings as a dates
-                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
-                {
-                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.Emailed); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, AuditAction.Emailed, username));
-
-                    //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
-
-                    //return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
-                    return Request.CreateResponse(HttpStatusCode.OK, username + " has been accepted.");
-                }
-                else
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-        }
-
-        [ActionName("Emailed")]
-        public HttpResponseMessage GetEmailed(string startdate, string endDate)
-        {
-            try
-            {
-                Analytics getNumOfDocs = new Analytics(); //DEPRICATED
-                DateTime StartdateValue;
-                DateTime EnddateValue;
-
-                //Validates the startdate and endDate strings as a dates
-                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
-                {
-                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.Emailed); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, AuditAction.Emailed));
-
-                    //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
-
-                    return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
-                }
-                else
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-        }
-
-
-        //Printed Route
-        [ActionName("Printed")]
-        public HttpResponseMessage GetPrinted(string startdate, string endDate, string username)
-        {
-            try
-            {
-                Analytics getNumOfDocs = new Analytics(); //DEPRICATED
-                DateTime StartdateValue;
-                DateTime EnddateValue;
-
-                //Validates the startdate and endDate strings as a dates
-                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
-                {
-                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.Printed); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, AuditAction.Printed, username));
-
-                    //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
-
-                    //return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
-                    return Request.CreateResponse(HttpStatusCode.OK, username + " has been accepted.");
-                }
-                else
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-        }
-
-        [ActionName("Printed")]
-        public HttpResponseMessage GetPrinted(string startdate, string endDate)
-        {
-            try
-            {
-                Analytics getNumOfDocs = new Analytics(); //DEPRICATED
-                DateTime StartdateValue;
-                DateTime EnddateValue;
-
-                //Validates the startdate and endDate strings as a dates
-                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
-                {
-                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.Printed); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, AuditAction.Printed));
-
-                    //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
-
-                    return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
-                }
-                else
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-        }
-
-
-        //Deleted Route
-        [ActionName("Deleted")]
-        public HttpResponseMessage GetDeleted(string startdate, string endDate, string username)
-        {
-            try
-            {
-                Analytics getNumOfDocs = new Analytics(); //DEPRICATED
-                DateTime StartdateValue;
-                DateTime EnddateValue;
-
-                //Validates the startdate and endDate strings as a dates
-                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
-                {
-                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.Deleted); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, AuditAction.Deleted, username));
-
-                    //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
-
-                    //return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
-                    return Request.CreateResponse(HttpStatusCode.OK, username + " has been accepted.");
-                }
-                else
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-        }
-
-        [ActionName("Deleted")]
-        public HttpResponseMessage GetDeleted(string startdate, string endDate)
-        {
-            try
-            {
-                Analytics getNumOfDocs = new Analytics(); //DEPRICATED
-                DateTime StartdateValue;
-                DateTime EnddateValue;
-
-                //Validates the startdate and endDate strings as a dates
-                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
-                {
-                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.Deleted); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, AuditAction.Deleted));
-
-                    //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
-
-                    return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
-                }
-                else
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-        }
-
-
-        //Viewed Route
-        [ActionName("Viewed")]
-        public HttpResponseMessage GetViewed(string startdate, string endDate, string username)
-        {
-            try
-            {
-                Analytics getNumOfDocs = new Analytics(); //DEPRICATED
-                DateTime StartdateValue;
-                DateTime EnddateValue;
-
-                //Validates the startdate and endDate strings as a dates
-                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
-                {
-                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.Viewed); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, AuditAction.Viewed, username));
-
-                    //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
-
-                    //return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
-                    return Request.CreateResponse(HttpStatusCode.OK, username + " has been accepted.");
-                }
-                else
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-        }
-
-        [ActionName("Viewed")]
-        public HttpResponseMessage GetViewed(string startdate, string endDate)
-        {
-            try
-            {
-                Analytics getNumOfDocs = new Analytics(); //DEPRICATED
-                DateTime StartdateValue;
-                DateTime EnddateValue;
-
-                //Validates the startdate and endDate strings as a dates
-                if (DateTime.TryParse(startdate, out StartdateValue) && DateTime.TryParse(endDate, out EnddateValue))
-                {
-                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, AuditAction.Viewed); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, AuditAction.Viewed));
-
-                    //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
-
-                    return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
-                }
-                else
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid date was entered. Please enter dates in the following format: mm/dd/yyyy");
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-        }
-
 
         // POST api/actions
         public HttpResponseMessage Post([FromBody]string value)
