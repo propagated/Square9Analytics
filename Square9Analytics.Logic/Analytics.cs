@@ -46,9 +46,10 @@ namespace Square9Analytics.Logic
             return fReturn;
         }
 
-        public AuditLog getAuditLog(DateTime startDate, DateTime endDate, AuditAction auditAction)
+        public AuditLog getAuditLog(DateTime startDate, DateTime endDate, AuditAction auditAction, string UserName = "")
         {
             AuditLog auditLog = new AuditLog();
+            string auditUser = UserName;
 
             DataTable auditTable = new DataTable();
             DataAccess.DataAnalytics da = new DataAccess.DataAnalytics();
@@ -56,12 +57,28 @@ namespace Square9Analytics.Logic
             // Fill in the datable with what is returned from DataAccess
             //auditTable = da.getActions(startDate, endDate);
 
-            foreach (DataRow dr in auditTable.Rows)
+            // This should determine what is going to be in the AuditLog variable that is being returned
+            // Depending if a UserName is passed or not, it should fill the data accordingly
+            if ( auditUser.Length < 0 )
             {
-                auditLog.Users.Add(dr["Users"].ToString());
-
-                auditLog.Log.Add(new AuditEntry() { Date = (DateTime)dr["Date"], Action = (AuditAction)dr["Action"] });
+                foreach (DataRow dr in auditTable.Rows)
+                {
+                    auditLog.Users.Add(dr["Users"].ToString());
+                    auditLog.Log.Add(new AuditEntry() { Date = (DateTime)dr["Date"], Action = (AuditAction)dr["Action"] });
+                }
             }
+
+            if (auditUser.Length > 0)
+            {
+                foreach (DataRow drow in auditTable.Rows)
+                {
+                    if (auditUser == drow["Users"].ToString())
+                    {
+                        auditLog.Log.Add(new AuditEntry() { Date = (DateTime)drow["Date"], Action = (AuditAction)drow["Action"] });
+                    }
+                }
+            }
+
 
             return auditLog;
         }
