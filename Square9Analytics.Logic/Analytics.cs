@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data;
 using System.Threading.Tasks;
 using Square9Analytics.Objects;
 
@@ -41,7 +42,28 @@ namespace Square9Analytics.Logic
 
                 throw new Exception("Current Date Range is invalid, End Date needs to be greater than Start Date");
             }
+
             return fReturn;
-        }     
+        }
+
+        public AuditLog getAuditLog(DateTime startDate, DateTime endDate, AuditAction auditAction)
+        {
+            AuditLog auditLog = new AuditLog();
+
+            DataTable auditTable = new DataTable();
+            DataAccess.DataAnalytics da = new DataAccess.DataAnalytics();
+
+            // Fill in the datable with what is returned from DataAccess
+            //auditTable = da.getActions(startDate, endDate);
+
+            foreach (DataRow dr in auditTable.Rows)
+            {
+                auditLog.Users.Add(dr["Users"].ToString());
+
+                auditLog.Log.Add(new AuditEntry() { Date = (DateTime)dr["Date"], Action = (AuditAction)dr["Action"] });
+            }
+
+            return auditLog;
+        }
     }
 }

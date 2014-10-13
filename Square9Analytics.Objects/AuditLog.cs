@@ -8,13 +8,13 @@ namespace Square9Analytics.Objects
 {
     public class AuditLog
     {
-        List<String> Users { get; set; }
-        List<AuditEntry> Log { get; set; }
+        public List<String> Users { get; set; }
+        public List<AuditEntry> Log { get; set; }
     }
 
     public class AuditEntry
     {
-        DateTime Date { get; set; }
-        AuditAction Action { get; set; }
+        public DateTime Date { get; set; }
+        public AuditAction Action { get; set; }
     }
 }
