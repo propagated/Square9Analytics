@@ -18,10 +18,10 @@ namespace Square9Analytics.Controllers
 
 
         // GET api/actions
-        [ActionName("Hello")]
+        [ActionName("Information")]
         public HttpResponseMessage GetSomething()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, 7);
+            return Request.CreateResponse(HttpStatusCode.OK, "You can pass the following actions: Indexed, AnnotationUpdate, Emailed, Printed, Deleted, and Viewed.");
         }
 
 
@@ -75,7 +75,7 @@ namespace Square9Analytics.Controllers
                     }
 
                     float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, InputAction); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, enddateValue, InputAction, username));
+                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, EnddateValue, InputAction, username));
 
                     //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
 
