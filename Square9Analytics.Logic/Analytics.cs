@@ -49,27 +49,35 @@ namespace Square9Analytics.Logic
         public AuditLog getAuditLog(DateTime startDate, DateTime endDate, AuditAction auditAction, string UserName = "")
         {
             AuditLog auditLog = new AuditLog();
+            List<string> users = new List<string>();
             string auditUser = UserName;
 
             DataTable auditTable = new DataTable();
             DataAccess.DataAnalytics da = new DataAccess.DataAnalytics();
 
             // Fill in the datable with what is returned from DataAccess
-            //auditTable = da.getActions(startDate, endDate);
+            //auditTable = da.getActions(startDate, endDate, userName);
 
-            // This should determine what is going to be in the AuditLog variable that is being returned
-            // Depending if a UserName is passed or not, it should fill the data accordingly
-            if ( auditUser.Length < 0 )
+            // This would parse through the table given from DA and then return it up to the API layer
+            foreach (DataRow dr in auditTable.Rows)
             {
-                foreach (DataRow dr in auditTable.Rows)
-                {
-                    auditLog.Users.Add(dr["Users"].ToString());
-                    auditLog.Log.Add(new AuditEntry() { Date = (DateTime)dr["Date"], Action = (AuditAction)dr["Action"] });
-                }
+                users.Add(dr["Users"].ToString());
+                auditLog.Log.Add(new AuditEntry() { Date = (DateTime)dr["Date"], Action = (AuditAction)dr["Action"] });
             }
 
+            auditLog.Users = users.Distinct().ToList();
+
+            /*
             if (auditUser.Length > 0)
             {
+                foreach (DataRow d in auditTable.Rows)
+                {
+                    if (auditUser == d["Users"].ToString())
+                    {
+                        auditLog.Users.Add(d["Users"].ToString());
+                    }
+                }
+
                 foreach (DataRow drow in auditTable.Rows)
                 {
                     if (auditUser == drow["Users"].ToString())
@@ -78,7 +86,7 @@ namespace Square9Analytics.Logic
                     }
                 }
             }
-
+            */
 
             return auditLog;
         }
