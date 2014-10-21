@@ -74,18 +74,26 @@ namespace Square9Analytics.Controllers
                             return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "An invalid action was entered.");
                     }
 
-                    float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, InputAction); //need the object to pass startdate and enddate to
-                    //AuditLog DataReturn = new AuditLog(getAuditLog(StartdateValue, EnddateValue, InputAction, username));
-
-                    //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
+                    //float docCount = getNumOfDocs.getActionCount(StartdateValue, EnddateValue, InputAction); //need the object to pass startdate and enddate to
+                    var Logic = new Square9Analytics.Logic.Analytics();
 
                     if (username == "")
                     {
-                        return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
+                        //return Request.CreateResponse(HttpStatusCode.OK, docCount); //docCount to be replaced by jsonDataReturn
+                        AuditLog DataReturn = Logic.getAuditLog(StartdateValue, EnddateValue, InputAction);
+
+                        //var jsonDataReturn = JsonConvert.SerializeObject<Dictionary<string, dynamic>>(DataReturn);
+                        var jsonDataReturn = JsonConvert.SerializeObject(DataReturn);
+                        return Request.CreateResponse(HttpStatusCode.OK, jsonDataReturn);
                     }
                     else
                     {
-                        return Request.CreateResponse(HttpStatusCode.OK, username + " has been accepted.");
+                        //return Request.CreateResponse(HttpStatusCode.OK, username + " has been accepted.");
+
+                        AuditLog DataReturn = Logic.getAuditLog(StartdateValue, EnddateValue, InputAction, username);
+
+                        var jsonDataReturn = JsonConvert.SerializeObject(DataReturn);
+                        return Request.CreateResponse(HttpStatusCode.OK, jsonDataReturn);
                     }
                 }
                 else
