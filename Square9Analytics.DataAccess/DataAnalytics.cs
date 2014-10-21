@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 using System.Data.Sql;
 using System.Data.SqlClient;
 using Square9Analytics.Objects;
@@ -11,27 +12,36 @@ namespace Square9Analytics.DataAccess
 {
     public class DataAnalytics
     {
-        public int getActionCount(DateTime startDate, DateTime endDate, AuditAction action)
+        public DataTable getActions(DateTime Date, string Users, AuditAction Action)
         {
-            int actionCount = 0;
-            using (var sqlConnection = new SqlConnection("Data Source=(local)\\GETSMART;Initial Catalog=SmartSearch;Integrated Security=SSPI;MultipleActiveResultSets=true"))
+            DataTable actionTable = new DataTable();
+          
+            try
             {
-                sqlConnection.Open();
-                string sql = "SELECT Count(*) AS Count FROM ssAudit WHERE ACTION LIKE '%" + action + "%' AND Date BETWEEN'" + startDate.ToString("yyyy-MM-dd HH:mm:ss") + "' AND '" + endDate.ToString("yyyy-MM-dd") + " 23:59:59.999'";
-                using (var command = new SqlCommand(sql, sqlConnection))
+                using (var sqlConnection = new SqlConnection("Data Source=(local)\\GETSMART;Initial Catalog=SmartSearch;Integrated Security=SSPI;MultipleActiveResultSets=true"))
                 {
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    sqlConnection.Open();
+                    string sql = "SELECT Action, Username, Date FROM ssAudit";
+                    using (var command = new SqlCommand(sql, sqlConnection))
                     {
-                        while (reader.Read())
-                        {
-                            actionCount = Convert.ToInt32(reader["Count"]);
-                        }
+                       using (SqlDataAdapter adapter = new SqlDataAdapter())
+                           
+                            {         
+                                    adapter.SelectCommand = command;
+                                    adapter.Fill(actionTable);                           
+                            }
+                        
                     }
+                    sqlConnection.Close();
                 }
-                sqlConnection.Close();
+                return actionTable;
 
             }
-            return actionCount;
+            catch(SqlException sqlEx)
+            {
+                throw(sqlEx);
+            }
+
         }
     }
 }
