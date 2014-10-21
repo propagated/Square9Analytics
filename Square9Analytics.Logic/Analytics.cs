@@ -52,7 +52,10 @@ namespace Square9Analytics.Logic
             List<string> users = new List<string>();
             string auditUser = UserName;
 
+            // Create the DataTable, and then clear the DataTable so that it is empty.
             DataTable auditTable = new DataTable();
+            auditTable.Clear();
+            
             DataAccess.DataAnalytics da = new DataAccess.DataAnalytics();
 
             // Fill in the datable with what is returned from DataAccess
