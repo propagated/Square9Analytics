@@ -12,31 +12,47 @@ namespace Square9Analytics.DataAccess
 {
     public class DataAnalytics
     {
-        public DataTable getActions(DateTime Date, string Users, AuditAction Action)
+        public List<AuditTable> getActions(DateTime startDate, DateTime endDate, AuditAction Action, string UserName = "No UserName")
         {
-            DataTable actionTable = new DataTable();
           
             try
             {
+                string action;
+                string userName;
+                DateTime date;
+                string sql = "";
+                List<AuditTable> audittable = new List<AuditTable>();
                 using (var sqlConnection = new SqlConnection("Data Source=(local)\\GETSMART;Initial Catalog=SmartSearch;Integrated Security=SSPI;MultipleActiveResultSets=true"))
                 {
                     sqlConnection.Open();
-                    string sql = "SELECT Action, Username, Date FROM ssAudit";
+                    if (UserName == "No UserName")
+                    {
+                        sql = "SELECT Action, Username, Date FROM ssAudit WHERE Date BETWEEN'" + startDate.ToString("yyyy-MM-dd HH:mm:ss") + "' AND '" + endDate.ToString("yyyy-MM-dd") + " 23:59:59.999' AND Action LIKE '%" + Action + "%'";
+                    }
+                    else
+                    {
+                        sql = "SELECT Action, Username, Date FROM ssAudit WHERE UserName LIKE '%" + UserName + "%' AND Date BETWEEN'" + startDate.ToString("yyyy-MM-dd HH:mm:ss") + "' AND '" + endDate.ToString("yyyy-MM-dd") + " 23:59:59.999' AND Action LIKE '%" + Action + "%'";
+                    }
                     using (var command = new SqlCommand(sql, sqlConnection))
                     {
-                       using (SqlDataAdapter adapter = new SqlDataAdapter())
-                           
-                            {         
-                                    adapter.SelectCommand = command;
-                                    adapter.Fill(actionTable);                           
-                            }
-                        
+                        using (SqlDataReader reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    action = Convert.ToString(reader["Action"]);
+                                    userName = Convert.ToString (reader["Username"]);
+                                    date = Convert.ToDateTime(reader["Date"]);
+                                    audittable.Add(new AuditTable() { Date = (DateTime)date, Action = action.ToString(), UserName = userName.ToString() });
+                                }
+                           }
+                        }
+                       
+                        sqlConnection.Close();
                     }
-                    sqlConnection.Close();
+                    
+                    return audittable;
                 }
-                return actionTable;
 
-            }
             catch(SqlException sqlEx)
             {
                 throw(sqlEx);

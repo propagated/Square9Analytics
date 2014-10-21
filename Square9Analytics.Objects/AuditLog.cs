@@ -17,4 +17,10 @@ namespace Square9Analytics.Objects
         DateTime Date { get; set; }
         AuditAction Action { get; set; }
     }
+    public class AuditTable
+    {
+        public DateTime Date { get; set; }
+        public string Action { get; set; }
+        public string UserName { get; set; }
+    }
 }
