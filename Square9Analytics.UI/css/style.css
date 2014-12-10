@@ -13,12 +13,3 @@ input[type='checkbox'] {
   position: relative;
   padding-top: 5px;
 }
-
-.chart div {
-  font: 10px sans-serif;
-  background-color: steelblue;
-  text-align: right;
-  padding: 3px;
-  margin: 1px;
-  color: white;
-}
