@@ -1,8 +1,17 @@
+//init global variables
+var auditData;
+var chart;
+//chart date range
+var startDate;
+var endDate;
+
 //document load
 $(function() {
-	var data = parseLog(Log);
+    //test data TODO: move to getData post api call
+    auditData = parseLog(Log);
 
-	var chart = c3.generate({
+    //init chart
+	chart = c3.generate({
 	data: {
 		columns: []
 	},
@@ -18,28 +27,43 @@ $(function() {
               position: 'middle'
             },
                 type: 'category',
-                categories: data[0]
+                categories: auditData[0]
           }}
 	});
-    chart.load({
-        columns: [data[1]]
-    });
-
-    //setup date range picker
-    $('#auditlogdates').daterangepicker({ timePicker: false, timePickerIncrement: 30, format: 'MM/DD/YYYY' });
     
-    $('#auditlogdates').on('apply.daterangepicker', function(ev,picker) {
-        $('#something').text(picker.startDate.format('YYYY-MM-DD'));
-        $('#someotherthing').text(picker.endDate.format('YYYY-MM-DD'));
-    });
+    //init date range picker
+    $('#auditlogdates').daterangepicker(
+        { 
+            timePicker: false, 
+            timePickerIncrement: 30, 
+            format: 'MM/DD/YYYY' 
+        },
+        function(start, end, label){
+            startDate = start.format('MM/DD/YYYY');
+            endDate = end.format('MM/DD/YYYY');
+        }
+    );
 
-    $("#buttonGet").click(function(){
-        var newData = getData();
-        chart.load({
-            columns: [newData]
-        });
+    //listeners
+    $( "#buttonGet" ).click(function() {
+        //get dates from picker
+        getData();
     });
+    
 });
+
+function getData(){
+    //call out to analytics api with ajax
+    // $.ajax({
+    //     url: ""
+    // });
+
+    
+    chart.load({
+        columns: [auditData[1]]
+    });
+    //return ['anal','1','3','4','2'];
+}
 
 //parse AuditLog data
 var parseLog = function(data){
@@ -76,10 +100,7 @@ var parseLog = function(data){
 	return [dates , counts];
 };
 
-function getData(){
-    return ['anal','1','3','4','2'];
-}
-
+//test data
 var Log = [
     {
         'Date': '2013-09-15',
