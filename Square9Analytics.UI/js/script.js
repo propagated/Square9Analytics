@@ -7,12 +7,10 @@ var endDate;
 
 //document load
 $(function() {
-    //test data TODO: move to getData post api call
-    auditData = parseLog(Log);
-
     //init chart
 	chart = c3.generate({
 	data: {
+        x: 'x',
 		columns: []
 	},
 	axis: { 
@@ -26,8 +24,7 @@ $(function() {
               text: 'Action Dates',
               position: 'middle'
             },
-                type: 'category',
-                categories: auditData[0]
+            type: 'category'
           }}
 	});
     
@@ -54,19 +51,27 @@ $(function() {
 
 function getData(){
     //call out to analytics api with ajax
-    // $.ajax({
-    //     url: ""
-    // });
+    $.ajax({
+        url: "../../square9analytics/analytics/Actions/GetData?startdate=6/1/2014&enddate=9/1/2014&action=indexed"
+    }).success(function(data) {
+        auditData = parseLog(data.Log,'Documents Indexed');
+        auditData[0].splice(0,0,'x');
+        chart.load({
+            columns: [
+                auditData[0],
+                auditData[1]
+            ]
+            //x: {categories: auditData[0]}
+        });
 
-    
-    chart.load({
-        columns: [auditData[1]]
+    }).error(function(data) {
+        
+        console.log(data);
     });
-    //return ['anal','1','3','4','2'];
 }
 
 //parse AuditLog data
-var parseLog = function(data){
+var parseLog = function(data, auditAction){
 	var parsedDates = {};
 
     var dates = [];
@@ -79,51 +84,40 @@ var parseLog = function(data){
 		//parsedDates[date] = parsedDates[date] ? parsedDates[date] + 1 : 1;
         parsedDates[date] = parsedDates[date] ? parsedDates[date] + 1 : 1;
     }
-    counts.push('anal'); //for posterity
+    counts.push(auditAction);
     for (var property in parsedDates) {
         if (parsedDates.hasOwnProperty(property)) {
             dates.push(property);
             counts.push(parsedDates[property]);
         }
     }
-    //dates.splice(0,0,'dates');
-    // return dates;
-    // //{date:count,date:count}
-    // //{[dates],[count]}
-    
-    // for (i = 1; i < parsedDates.count; i++)
-    // {
-    //     dates[i] = Object.keys(parsedDates)[i];
-    //     counts[i] = parsedDates[dates[i]];
-    // }
-
 	return [dates , counts];
 };
 
-//test data
-var Log = [
-    {
-        'Date': '2013-09-15',
-        'Action': 'Document Indexed'
-    },
-    {
-        'Date': '2013-09-15',
-        'Action': 'Document Indexed'
-    },
-    {
-        'Date': '2013-09-24',
-        'Action': 'Document Indexed'
-    },
-    {
-        'Date': '2013-09-30',
-        'Action': 'Document Indexed'
-    },
-    {
-        'Date': '2013-09-30',
-        'Action': 'Document Indexed'
-    },
-    {
-        'Date': '2013-10-03',
-        'Action': 'Document Indexed'
-    }
-];
+// //test data
+// var Log = [
+//     {
+//         'Date': '2013-09-15',
+//         'Action': 'Document Indexed'
+//     },
+//     {
+//         'Date': '2013-09-15',
+//         'Action': 'Document Indexed'
+//     },
+//     {
+//         'Date': '2013-09-24',
+//         'Action': 'Document Indexed'
+//     },
+//     {
+//         'Date': '2013-09-30',
+//         'Action': 'Document Indexed'
+//     },
+//     {
+//         'Date': '2013-09-30',
+//         'Action': 'Document Indexed'
+//     },
+//     {
+//         'Date': '2013-10-03',
+//         'Action': 'Document Indexed'
+//     }
+// ];
