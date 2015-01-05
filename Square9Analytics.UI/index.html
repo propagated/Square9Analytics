@@ -4,6 +4,7 @@
 		<title>Audit Log Analytics</title>
 		<link data-require="bootstrap-css@3.1.1" data-semver="3.1.1" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
 		<script data-require="jquery@*" data-semver="2.1.1" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
 		<link href="css/c3.css" rel="stylesheet" type="text/css" />
 		<script src="lib/d3.min.js" charset="utf-8"></script>
@@ -21,9 +22,22 @@
 	</head>
 	<body>
 		<div id="chart"></div>
-
+		<div class="dropdown">
+					<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+		    			Dropdown
+		    			<span class="caret"></span>
+		  			</button>
+		  			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+			   			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+			   			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+			    		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+		  			</ul>
+				</div>
 		<form>
 	      <div class="form-group">
+
+
 	        <label for="auditlogdates">Audit Log Dates:</label>
 	        <div class="input-group">
 	          <span class="input-group-addon">

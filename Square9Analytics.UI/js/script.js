@@ -46,6 +46,11 @@ $(function() {
         //get dates from picker
         getData();
     });
+
+    // $( "#dropdownMenu1" ).click(function() {
+    //     $('.dropdown-toggle').dropdown();
+    // });
+    
     
 });
 
