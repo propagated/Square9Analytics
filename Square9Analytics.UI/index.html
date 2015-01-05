@@ -22,18 +22,7 @@
 	</head>
 	<body>
 		<div id="chart"></div>
-		<div class="dropdown">
-					<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-		    			Dropdown
-		    			<span class="caret"></span>
-		  			</button>
-		  			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-				    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-			   			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-			   			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-			    		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
-		  			</ul>
-				</div>
+
 		<form>
 	      <div class="form-group">
 
@@ -47,7 +36,7 @@
 	        </div>
 	      </div>
 	    </form>
-	    <div class="wellLabel">Actions:</div>
+	    <div class="wellLabel">Filters:</div>
 	    <div class="well">
 	      <!-- Checkboxes for audit actions here -->
 	      <div>
@@ -58,6 +47,18 @@
 	        <input type="checkbox" id="chk_2" name="chk_2" value="Modify" />
 	        <label for="chk_2" class="actionLabel">Workflows Ran</label>
 	      </div>
+	      <div class="dropdown">
+			<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >
+    			User
+    			<span class="caret"></span>
+  			</button>
+  			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+	   			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+	   			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+	    		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+  			</ul>
+		</div>	
 	    </div>
 	    <div>
 	      <button type="button" id="buttonGet" class="btn btn-success">Get Data</button>
