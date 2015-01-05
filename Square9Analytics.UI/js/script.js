@@ -22,13 +22,14 @@ $(function() {
         x: {
             label: {
               text: 'Action Dates',
-              position: 'outer-left'
+              position: 'inner-left'
             },
             type : 'timeseries',
             tick: {
                 fit: true,
                 format: "%m-%d-%Y",
-                multiline:true
+                //multiline:true,
+                rotate:90
             }
           }}
 	});
@@ -65,15 +66,36 @@ function getData(){
     $.ajax({
         url: url
     }).success(function(data) {
-        auditData = parseLog(data.Log,'Documents Indexed');
-        auditData[0].splice(0,0,'x');
-        chart.load({
-            columns: [
-                auditData[0],
-                auditData[1]
-            ]
-            //x: {categories: auditData[0]}
-        });
+        if (data.Log.length > 0){
+            auditData = parseLog(data.Log,'Documents Indexed');
+            auditData[0].splice(0,0,'x');
+            chart.load({
+                //unload: ['x', 'Documents Indexed'],
+                columns: [
+                    auditData[0],
+                    auditData[1]
+                ]
+            });
+        }
+        else{
+            chart.load({
+                unload: ['x', 'Documents Indexed'],
+                columns: [
+
+                ]
+            });
+        }
+
+        // testing
+        // setTimeout(function () {
+        //     chart.load({
+        //         unload: ['x', 'Documents Indexed'],
+        //         // columns: [
+        //         //     ['x', 130, 120, 150, 140, 160, 150],
+        //         //     ['data4', 30, 20, 50, 40, 60, 50],
+        //         // ]
+        //     });
+        // }, 2000);
 
     }).error(function(data) {
         
