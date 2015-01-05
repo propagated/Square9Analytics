@@ -2,8 +2,8 @@
 var auditData;
 var chart;
 //chart date range
-var startDate;
-var endDate;
+var startDate = '6/1/2014';//test data
+var endDate = '9/1/2014';
 
 //document load
 $(function() {
@@ -22,9 +22,14 @@ $(function() {
         x: {
             label: {
               text: 'Action Dates',
-              position: 'middle'
+              position: 'outer-left'
             },
-            type: 'category'
+            type : 'timeseries',
+            tick: {
+                fit: true,
+                format: "%m-%d-%Y",
+                multiline:true
+            }
           }}
 	});
     
@@ -56,8 +61,9 @@ $(function() {
 
 function getData(){
     //call out to analytics api with ajax
+    var url = "../../square9analytics/analytics/Actions/GetData?startdate=" + startDate + "&enddate=" + endDate + "&action=indexed";
     $.ajax({
-        url: "../../square9analytics/analytics/Actions/GetData?startdate=6/1/2014&enddate=9/1/2014&action=indexed"
+        url: url
     }).success(function(data) {
         auditData = parseLog(data.Log,'Documents Indexed');
         auditData[0].splice(0,0,'x');
@@ -81,7 +87,6 @@ var parseLog = function(data, auditAction){
 
     var dates = [];
     var counts = [];
-
 
 	for (var i = 0; i < data.length;i++)
 	{
