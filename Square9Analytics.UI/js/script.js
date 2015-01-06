@@ -28,8 +28,12 @@ $(function() {
             tick: {
                 fit: true,
                 format: "%m-%d-%Y",
-                //multiline:true,
-                rotate:90
+                rotate:45,
+
+                //culling: false, //show all ticks (dates may overlap with big data sets)
+                culling: {
+                    max: 20 // the number of tick texts will be adjusted to less than this value
+                }
             }
           }}
 	});
