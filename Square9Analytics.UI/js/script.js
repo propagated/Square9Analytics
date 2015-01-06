@@ -76,12 +76,11 @@ function getData(){
     var url = "../../square9analytics/analytics/Actions/GetData?startdate=" + startDate + "&enddate=" + endDate + "&action=indexed";
     $.ajax({
         url: url
-    }).success(function(data) {
+    }).done(function(data) {
         if (data.Log.length > 0){
             auditData = parseLog(data.Log,'Documents Indexed');
             auditData[0].splice(0,0,'x');
             chart.load({
-                //unload: ['x', 'Documents Indexed'],
                 columns: [
                     auditData[0],
                     auditData[1]
@@ -90,10 +89,7 @@ function getData(){
         }
         else{
             chart.load({
-                unload: ['x', 'Documents Indexed'],
-                columns: [
-
-                ]
+                unload: ['x', 'Documents Indexed']
             });
         }
 
@@ -108,9 +104,9 @@ function getData(){
         //     });
         // }, 2000);
 
-    }).error(function(data) {
-        
-        console.log(data);
+    }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+        console.log(textStatus);
+        console.log(errorThrown);
     });
 }
 
