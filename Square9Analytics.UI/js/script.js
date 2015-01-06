@@ -63,14 +63,12 @@ $(function() {
         //get dates from picker
         getData();
     });
-
     // $( "#dropdownMenu1" ).click(function() {
     //     $('.dropdown-toggle').dropdown();
     // });
-    
-    
 });
 
+//update chart
 function getData(){
     //call out to analytics api with ajax
     var url = "../../square9analytics/analytics/Actions/GetData?startdate=" + startDate + "&enddate=" + endDate + "&action=indexed";
@@ -93,14 +91,14 @@ function getData(){
             });
         }
 
-        // testing
+        //testing function, this will fire automatically to test c3 transitions
         // setTimeout(function () {
         //     chart.load({
-        //         unload: ['x', 'Documents Indexed'],
-        //         // columns: [
-        //         //     ['x', 130, 120, 150, 140, 160, 150],
-        //         //     ['data4', 30, 20, 50, 40, 60, 50],
-        //         // ]
+        //         //unload: ['x', 'Documents Indexed'],
+        //         columns: [
+        //             x1,
+        //             data1
+        //         ]
         //     });
         // }, 2000);
 
@@ -134,7 +132,7 @@ var parseLog = function(data, auditAction){
 };
 
 // //test data
-// var Log = [
+// var parseTestLog = [
 //     {
 //         'Date': '2013-09-15',
 //         'Action': 'Document Indexed'
@@ -160,3 +158,6 @@ var parseLog = function(data, auditAction){
 //         'Action': 'Document Indexed'
 //     }
 // ];
+
+//var x1 = ['x', '2013-10-31', '2013-12-31', '2014-01-31', '2014-02-28', '2014-03-8', '2014-03-20', '2014-03-21', '2014-03-22'];
+//var data1 = ['Documents Indexed', 4,4,4,3,2,6,2,1];
