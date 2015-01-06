@@ -32,7 +32,7 @@ $(function() {
 
                 //culling: false, //show all ticks (dates may overlap with big data sets)
                 culling: {
-                    max: 20 // the number of tick texts will be adjusted to less than this value
+                    max: 15 // the number of tick texts will be adjusted to less than this value
                 }
             }
           }}
