@@ -2,8 +2,8 @@
 var auditData;
 var chart;
 //chart date range
-var startDate = '6/1/2014';//test data
-var endDate = '9/1/2014';
+var startDate;// = '10/1/2014';//test data
+var endDate;// = '9/1/2014';
 
 //document load
 $(function() {
@@ -39,17 +39,24 @@ $(function() {
 	});
     
     //init date range picker
+    startDate = moment().subtract(2, 'months').format("MM/DD/YYYY");
+    endDate = moment().format("MM/DD/YYYY");
     $('#auditlogdates').daterangepicker(
         { 
             timePicker: false, 
             timePickerIncrement: 30, 
-            format: 'MM/DD/YYYY' 
+            format: 'MM/DD/YYYY',
+            // startDate: startDate,
+            // enddate: endDate
         },
         function(start, end, label){
             startDate = start.format('MM/DD/YYYY');
             endDate = end.format('MM/DD/YYYY');
         }
     );
+    //set the dates that will appear in the box
+    $('#auditlogdates').data('daterangepicker').setStartDate(startDate);
+    $('#auditlogdates').data('daterangepicker').setEndDate(endDate);
 
     //listeners
     $( "#buttonGet" ).click(function() {
