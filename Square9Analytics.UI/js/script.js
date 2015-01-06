@@ -20,6 +20,7 @@ $(function() {
             }
         },
         x: {
+            //TODO: pad end of x for container
             label: {
               text: 'Action Dates',
               position: 'inner-left'
@@ -60,7 +61,7 @@ $(function() {
 
     //listeners
     $( "#buttonGet" ).click(function() {
-        //get dates from picker
+        //update chart
         getData();
     });
     // $( "#dropdownMenu1" ).click(function() {
@@ -77,6 +78,8 @@ function getData(){
     }).done(function(data) {
         if (data.Log.length > 0){
             auditData = parseLog(data.Log,'Documents Indexed');
+            //TODO: parse data.Users into dropdown issue #20
+
             auditData[0].splice(0,0,'x');
             chart.load({
                 columns: [
