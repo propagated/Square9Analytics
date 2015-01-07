@@ -20,7 +20,6 @@ $(function() {
             }
         },
         x: {
-            //TODO: pad end of x for container
             label: {
               text: 'Action Dates',
               position: 'inner-left'
@@ -36,7 +35,11 @@ $(function() {
                     max: 15 // the number of tick texts will be adjusted to less than this value
                 }
             }
-          }}
+      }},
+      padding:{
+        right:50,
+        left:50
+      }
 	});
     
     //init date range picker
