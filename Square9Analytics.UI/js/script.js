@@ -65,14 +65,65 @@ $(function() {
     //listeners
     $( "#buttonGet" ).click(function() {
         //update chart
-        getData();
+        updateChart();
     });
     // $( "#dropdownMenu1" ).click(function() {
     //     $('.dropdown-toggle').dropdown();
     // });
 });
 
-//update chart
+
+function updateChart(){
+
+    getAPIData('Documents Indexed');
+}
+
+function getAPIData(action, user){
+    //call out to analytics api with ajax
+    var url = "../../square9analytics/analytics/Actions/GetData";
+    if (user){
+        url += "/" + user;
+    }
+    url += "?startdate=" + startDate + "&enddate=" + endDate + "&action=indexed";
+
+    $.ajax({
+        url: url
+    }).done(function(data) {
+        if (data.Log.length > 0){
+            auditData = parseLog(data.Log,'Documents Indexed');
+            //TODO: parse data.Users into dropdown issue #20
+
+            auditData[0].splice(0,0,'x');
+            chart.load({
+                columns: [
+                    auditData[0],
+                    auditData[1]
+                ]
+            });
+        }
+        else{
+            chart.load({
+                unload: ['x', 'Documents Indexed']
+            });
+        }
+
+        //testing function, this will fire automatically to test c3 transitions
+        // setTimeout(function () {
+        //     chart.load({
+        //         //unload: ['x', 'Documents Indexed'],
+        //         columns: [
+        //             x1,
+        //             data1
+        //         ]
+        //     });
+        // }, 2000);
+
+    }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+        console.log(textStatus);
+        console.log(errorThrown);
+    });
+}
+
 function getData(){
     //call out to analytics api with ajax
     var url = "../../square9analytics/analytics/Actions/GetData?startdate=" + startDate + "&enddate=" + endDate + "&action=indexed";
