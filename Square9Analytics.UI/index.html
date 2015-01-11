@@ -15,71 +15,81 @@
 <script src="lib/moment.js"></script>
 <script src="lib/daterangepicker.js"></script>
 <link rel="stylesheet" href="css/daterangepicker-bs3.css" />
-
+  
 
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
+  <div class='container'>
+    <div id="chart"></div>
 
-<div class='container'>
-	<div id="chart"></div>
+    <div class="form-group">
+      <label for="auditlogdates">Audit Log Dates:</label>
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-calendar"></i>
+        </span>
+        <input type="text" name="auditlog" id="auditlogdates" class="form-control" value="" />
+      </div>
+    </div>
 
-	<form>
-		<div class="form-group">
-			<label for="auditlogdates">Audit Log Dates:</label>
-			<div class="input-group">
-			  <span class="input-group-addon">
-			    <i class="fa fa-calendar"></i>
-			  </span>
-			  <input type="text" name="auditlog" id="auditlogdates" class="form-control" value="" />
-			</div>
-		</div>
-    
     <div class="wellLabel">Filters:</div>
-  	<div class="well">
-    	<!-- Checkboxes for audit actions here -->
-    	<div class="wide">
-        <input type="checkbox" id="chk_2" name="chk_2" value="Modify" />
-        <label for="chk_2" class="actionLabel">Documents Viewed</label>
+    <div class="well">
+      <div class="container-fluid">
+        <!--actions checkboxes -->
+        <div class="row">
+          <div class="col-sm-4">
+            <div>
+              <input type="checkbox" id="chk_2" name="chk_2" value="Modify" />
+              <label for="chk_2" class="actionLabel">Documents Viewed</label>
+            </div>
+            <div>
+              <input type="checkbox" id="chk_2" name="chk_2" value="" checked />
+              <label for="chk_2" class="actionLabel">Documents Indexed</label>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div>
+              <input type="checkbox" id="chk_2" name="chk_2" value="Modify" />
+              <label for="chk_2" class="actionLabel">Annotation Updated</label>
+            </div>
+            <div>
+              <input type="checkbox" id="indexed" name="chk_indexed" value="" />
+              <label for="chk_1" class="actionLabel">Documents Deleted</label>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div>
+              <input type="checkbox" id="chk_2" name="chk_2" value="Modify" />
+              <label for="chk_2" class="actionLabel">Documents Printed</label>
+            </div>
+            <div>
+              <input type="checkbox" id="chk_2" name="chk_2" value="Modify" />
+              <label for="chk_2" class="actionLabel">Documents Emailed</label>
+            </div>  
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" id="chk_2" name="chk_2" value="" checked/>
-        <label for="chk_2" class="actionLabel">Documents Indexed</label>
-      </div>
-      <div>
-        <input type="checkbox" id="chk_2" name="chk_2" value="Modify" />
-        <label for="chk_2" class="actionLabel">Annotation Updated</label>
-      </div>
-      <div>
-        <input type="checkbox" id="indexed" name="chk_indexed" value="" />
-        <label for="chk_1" class="actionLabel">Documents Emailed</label>
-      </div>
-      <div>
-        <input type="checkbox" id="chk_2" name="chk_2" value="Modify" />
-        <label for="chk_2" class="actionLabel">Documents Printed</label>
-      </div>
-      <div>
-        <input type="checkbox" id="chk_2" name="chk_2" value="Modify" />
-        <label for="chk_2" class="actionLabel">Documents Deleted</label>
-      </div>
+    </div>
 
-			<div class="dropdown">
-				<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="true" >
-	    			User
-	    			<span class="caret"></span>
-  			</button>
-  			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-  			<!-- TODO: fill list -->
+    <!--Users dropdown -->
+    <div class="row">
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="true" >
+          User
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          <!-- TODO: fill list -->
 
-				</ul>
-			</div>
-		</div>
-		<div>
-		  <button type="button" id="buttonGet" class="btn btn-success">Get Data</button>
-		</div>
-  </form>
-</div>
-
+        </ul>
+      </div>
+    </div>
+    <div>
+      <button type="button" id="buttonGet" class="btn btn-success">Get Data</button>
+    </div>
+  </div>
 </body>
 </html>
