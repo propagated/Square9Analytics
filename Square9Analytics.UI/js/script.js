@@ -1,5 +1,5 @@
 //init global variables
-var auditData;
+//var auditData;
 var chart;
 //chart date range
 var startDate;// = '10/1/2014';//test data
@@ -14,28 +14,29 @@ $(function() {
             columns: []
         },
         axis: { 
-            y: { 
-                label: { 
-                    text: 'Number of actions taken.', position: 'outer-middle'
-                }
+          y: { 
+              label: { 
+                  text: 'Number of actions taken.', position: 'outer-middle'
+              }
+          },
+          x: {
+            label: {
+                text: 'Action Dates',
+                position: 'inner-left'
             },
-            x: {
-                label: {
-                    text: 'Action Dates',
-                    position: 'inner-left'
-                },
-                type : 'timeseries',
-                tick: {
-                    fit: true,
-                    format: "%m-%d-%Y",
-                    rotate:45,
+            type : 'timeseries',
+            tick: {
+              fit: true,
+              format: "%m-%d-%Y",
+              rotate:45,
 
-                //culling: false, //show all ticks (dates may overlap with big data sets)
-                culling: {
-                    max: 15 // the number of tick texts will be adjusted to less than this value
-                }
+          		//culling: false, //show all ticks (dates may overlap with big data sets)
+              culling: {
+                max: 15 // the number of tick texts will be adjusted to less than this value
+              }
             }
-        }},
+          }
+        },
         padding:{
             right:50,
             left:50
@@ -65,14 +66,23 @@ $(function() {
     //listeners
     $( "#buttonGet" ).click(function() {
     	//just unload all
-    	chart.unload();
+    	// chart.unload({
+    	// 	load:true
+    	// });
+    	//unload any unchecked boxes
       // $("input:checkbox:not(:checked)").each(function (index){
-      //     cleanChart($(this).attr("name"));
+      //     //cleanChart($(this).attr("name"));
+      //     chart.unload();
       // });
 
-    	$("input:checked").each(function (index){
-        getAPIData($(this).val(), $(this).attr("name"));
-      });
+      //chart unload animation breaks async load, timeout hack workaround
+      //until API supports multiple actions 1 call
+      //setTimeout(function(){
+      	$("input:checked").each(function (index){
+    			getAPIData($(this).val(), $(this).attr("name"));
+    		});
+      //},1000);
+    	
     });
 
     //user dropdown?
@@ -98,16 +108,22 @@ function getAPIData(action, title){
         url: url
     }).done(function(data) {
         if (data.Log.length > 0){
-            auditData = parseLog(data.Log, title);
-            //TODO: parse data.Users into dropdown issue #20
+          var auditData = parseLog(data.Log, title);
+          //TODO: parse data.Users into dropdown issue #20
 
-            auditData[0].splice(0,0,'x');
-            chart.load({
-                columns: [
-                    auditData[0],
-                    auditData[1]
-                ]
-            });
+          auditData[0].splice(0,0,'x');
+          var unchecked = $.map($("input:checkbox:not(:checked)"), function(v){
+          	return v.name;
+          });
+          chart.load({
+          	//c3 unload animation breaks the chart when called outside this function
+          	//nuke it down workaround
+          	unload: [unchecked],
+            columns: [
+                auditData[0],
+                auditData[1]
+            ]
+          });
         }
 
         //testing function, this will fire automatically to test c3 transitions
@@ -124,12 +140,6 @@ function getAPIData(action, title){
     }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
         console.log(textStatus);
         console.log(errorThrown);
-    });
-}
-function cleanChart(action)
-{
-    chart.load({
-        unload: [action]
     });
 }
 
