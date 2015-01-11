@@ -64,15 +64,15 @@ $(function() {
 
     //listeners
     $( "#buttonGet" ).click(function() {
-        $("input:checkbox:not(:checked)").each(function (index){
-            //console.log('unchecked ' + $(this).val() + ' AKA ' + $(this).attr("name"));
-            cleanChart($(this).val());
-        });
+    	//just unload all
+    	chart.unload();
+      // $("input:checkbox:not(:checked)").each(function (index){
+      //     cleanChart($(this).attr("name"));
+      // });
 
-        $("input:checked").each(function (index){
-            //console.log('checked ' + $(this).val() + ' AKA ' + $(this).attr("name"));
-            getAPIData($(this).val(), $(this).attr("name"));
-        });
+    	$("input:checked").each(function (index){
+        getAPIData($(this).val(), $(this).attr("name"));
+      });
     });
 
     //user dropdown?
@@ -107,11 +107,6 @@ function getAPIData(action, title){
                     auditData[0],
                     auditData[1]
                 ]
-            });
-        }
-        else{
-            chart.load({
-                unload: [title]
             });
         }
 
