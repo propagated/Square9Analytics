@@ -8,39 +8,39 @@ var endDate;// = '9/1/2014';
 //document load
 $(function() {
     //init chart
-	chart = c3.generate({
-	data: {
-        x: 'x',
-		columns: []
-	},
-	axis: { 
-        y: { 
-            label: { 
-                text: 'Number of actions taken.', position: 'outer-middle'
-            }
+    chart = c3.generate({
+    	data: {
+            x: 'x',
+            columns: []
         },
-        x: {
-            label: {
-              text: 'Action Dates',
-              position: 'inner-left'
+        axis: { 
+            y: { 
+                label: { 
+                    text: 'Number of actions taken.', position: 'outer-middle'
+                }
             },
-            type : 'timeseries',
-            tick: {
-                fit: true,
-                format: "%m-%d-%Y",
-                rotate:45,
+            x: {
+                label: {
+                    text: 'Action Dates',
+                    position: 'inner-left'
+                },
+                type : 'timeseries',
+                tick: {
+                    fit: true,
+                    format: "%m-%d-%Y",
+                    rotate:45,
 
                 //culling: false, //show all ticks (dates may overlap with big data sets)
                 culling: {
                     max: 15 // the number of tick texts will be adjusted to less than this value
                 }
             }
-      }},
-      padding:{
-        right:50,
-        left:50
-      }
-	});
+        }},
+        padding:{
+            right:50,
+            left:50
+        }
+    });
     
     //init date range picker
     startDate = moment().subtract(2, 'months').format("MM/DD/YYYY");
@@ -64,33 +64,41 @@ $(function() {
 
     //listeners
     $( "#buttonGet" ).click(function() {
-        //update chart
-        updateChart();
+        $("input:checkbox:not(:checked)").each(function (index){
+            //console.log('unchecked ' + $(this).val() + ' AKA ' + $(this).attr("name"));
+            cleanChart($(this).val());
+        });
+
+        $("input:checked").each(function (index){
+            //console.log('checked ' + $(this).val() + ' AKA ' + $(this).attr("name"));
+            getAPIData($(this).val(), $(this).attr("name"));
+        });
     });
+
+    //user dropdown?
     // $( "#dropdownMenu1" ).click(function() {
     //     $('.dropdown-toggle').dropdown();
     // });
 });
 
-
-function updateChart(){
-
-    getAPIData('Documents Indexed');
-}
-
-function getAPIData(action, user){
+//Indexed, AnnotationUpdate, Emailed, Printed, Deleted, and Viewed.
+function getAPIData(action, title){
     //call out to analytics api with ajax
     var url = "../../square9analytics/analytics/Actions/GetData";
+
+    //TODO: get user from dropdown issue #20
+    var user = null;
+
     if (user){
         url += "/" + user;
     }
-    url += "?startdate=" + startDate + "&enddate=" + endDate + "&action=indexed";
+    url += "?startdate=" + startDate + "&enddate=" + endDate + "&action=" + action;
 
     $.ajax({
         url: url
     }).done(function(data) {
         if (data.Log.length > 0){
-            auditData = parseLog(data.Log,'Documents Indexed');
+            auditData = parseLog(data.Log, title);
             //TODO: parse data.Users into dropdown issue #20
 
             auditData[0].splice(0,0,'x');
@@ -103,7 +111,7 @@ function getAPIData(action, user){
         }
         else{
             chart.load({
-                unload: ['x', 'Documents Indexed']
+                unload: [title]
             });
         }
 
@@ -123,45 +131,10 @@ function getAPIData(action, user){
         console.log(errorThrown);
     });
 }
-
-function getData(){
-    //call out to analytics api with ajax
-    var url = "../../square9analytics/analytics/Actions/GetData?startdate=" + startDate + "&enddate=" + endDate + "&action=indexed";
-    $.ajax({
-        url: url
-    }).done(function(data) {
-        if (data.Log.length > 0){
-            auditData = parseLog(data.Log,'Documents Indexed');
-            //TODO: parse data.Users into dropdown issue #20
-
-            auditData[0].splice(0,0,'x');
-            chart.load({
-                columns: [
-                    auditData[0],
-                    auditData[1]
-                ]
-            });
-        }
-        else{
-            chart.load({
-                unload: ['x', 'Documents Indexed']
-            });
-        }
-
-        //testing function, this will fire automatically to test c3 transitions
-        // setTimeout(function () {
-        //     chart.load({
-        //         //unload: ['x', 'Documents Indexed'],
-        //         columns: [
-        //             x1,
-        //             data1
-        //         ]
-        //     });
-        // }, 2000);
-
-    }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-        console.log(textStatus);
-        console.log(errorThrown);
+function cleanChart(action)
+{
+    chart.load({
+        unload: [action]
     });
 }
 
@@ -172,9 +145,9 @@ var parseLog = function(data, auditAction){
     var dates = [];
     var counts = [];
 
-	for (var i = 0; i < data.length;i++)
-	{
-		var date = data[i].Date;
+    for (var i = 0; i < data.length;i++)
+    {
+        var date = data[i].Date;
 		//parsedDates[date] = parsedDates[date] ? parsedDates[date] + 1 : 1;
         parsedDates[date] = parsedDates[date] ? parsedDates[date] + 1 : 1;
     }
@@ -185,7 +158,7 @@ var parseLog = function(data, auditAction){
             counts.push(parsedDates[property]);
         }
     }
-	return [dates , counts];
+    return [dates , counts];
 };
 
 // //test data
