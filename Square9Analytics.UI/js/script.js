@@ -65,24 +65,19 @@ $(function() {
 
     //listeners
     $( "#buttonGet" ).click(function() {
-    	//just unload all
-    	// chart.unload({
-    	// 	load:true
-    	// });
-    	//unload any unchecked boxes
-      // $("input:checkbox:not(:checked)").each(function (index){
-      //     //cleanChart($(this).attr("name"));
-      //     chart.unload();
-      // });
+    	//unload any unchecked boxes prior to timeout hack
+      $("input:checkbox:not(:checked)").each(function (index){
+          //cleanChart($(this).attr("name"));
+          chart.unload();
+      });
 
       //chart unload animation breaks async load, timeout hack workaround
-      //until API supports multiple actions 1 call
-      //setTimeout(function(){
+      //until API supports multiple actions 1 call or chart.load(unload:[]) works correctly
+      setTimeout(function(){
       	$("input:checked").each(function (index){
     			getAPIData($(this).val(), $(this).attr("name"));
     		});
-      //},1000);
-    	
+      },500);
     });
 
     //user dropdown?
@@ -112,13 +107,14 @@ function getAPIData(action, title){
           //TODO: parse data.Users into dropdown issue #20
 
           auditData[0].splice(0,0,'x');
-          var unchecked = $.map($("input:checkbox:not(:checked)"), function(v){
-          	return v.name;
-          });
+
+          //c3 unload animation breaks the chart when called outside this function
+          //we're supposed to unload here, but it won't work right
+          // var unchecked = $.map($("input:checkbox:not(:checked)"), function(v){
+          // 	return v.name;
+          // });
           chart.load({
-          	//c3 unload animation breaks the chart when called outside this function
-          	//nuke it down workaround
-          	unload: [unchecked],
+          	//unload: [unchecked],
             columns: [
                 auditData[0],
                 auditData[1]
