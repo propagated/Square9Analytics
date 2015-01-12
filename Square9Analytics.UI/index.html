@@ -15,7 +15,7 @@
 	<script src="lib/moment.js"></script>
 	<script src="lib/daterangepicker.js"></script>
 	<link rel="stylesheet" href="css/daterangepicker-bs3.css" />
-	
+
 
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="css/style.css" />
@@ -27,7 +27,7 @@
 
 		<div class="form-group">
 			<label for="auditlogdates">Audit Log Dates:</label>
-			<div class="input-group">
+			<div class="input-group  col-md-3">
 				<span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
@@ -49,6 +49,7 @@
 							<input type="checkbox" id="chk_index" name="Documents Indexed" value="indexed" checked />
 							<label for="chk_index" class="actionLabel">Documents Indexed</label>
 						</div>
+
 					</div>
 					<div class="col-sm-4">
 						<div>
@@ -70,23 +71,26 @@
 							<label for="chk_email" class="actionLabel">Documents Emailed</label>
 						</div>  
 					</div>
+					<div class="col-sm-4">
+						<div class="dropdown">
+							<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="true" >
+								User
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+								<!-- TODO: fill list -->
+
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-
-		<!--Users dropdown -->
-		<div class="row">
-			<div class="dropdown">
-				<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="true" >
-					User
-					<span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-					<!-- TODO: fill list -->
-
-				</ul>
+			<!--Users dropdown -->
+			<div class="row">
+				
 			</div>
 		</div>
+
 		<div>
 			<button type="button" id="buttonGet" class="btn btn-success">Get Data</button>
 		</div>
