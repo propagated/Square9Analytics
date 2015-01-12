@@ -68,16 +68,18 @@ $(function() {
     	//unload any unchecked boxes prior to timeout hack
       $("input:checkbox:not(:checked)").each(function (index){
           //cleanChart($(this).attr("name"));
-          chart.unload();
+          chart.unload({
+          	done: function(){
+          		//chart unload animation breaks async load, timeout hack workaround
+      				//until API supports multiple actions 1 call to avoid multiple unload() calls
+          		setTimeout(function(){
+		          	$("input:checked").each(function (index){
+		    					getAPIData($(this).val(), $(this).attr("name"));
+		    				});
+		          },230);
+        		}
+      		});
       });
-
-      //chart unload animation breaks async load, timeout hack workaround
-      //until API supports multiple actions 1 call or chart.load(unload:[]) works correctly
-      setTimeout(function(){
-      	$("input:checked").each(function (index){
-    			getAPIData($(this).val(), $(this).attr("name"));
-    		});
-      },500);
     });
 
     //user dropdown?
@@ -92,8 +94,8 @@ function getAPIData(action, title){
     var url = "../../square9analytics/analytics/Actions/GetData";
 
     //TODO: get user from dropdown issue #20
-    var user = null;
 
+    var user = null;
     if (user){
         url += "/" + user;
     }
@@ -108,8 +110,9 @@ function getAPIData(action, title){
 
           auditData[0].splice(0,0,'x');
 
-          //c3 unload animation breaks the chart when called outside this function
-          //we're supposed to unload here, but it won't work right
+          //c3 unload animation breaks loading the chart when called outside chart.load()
+          //if called shorter than 230ms apart. because this is a callback, calling unload()
+          //breaks any instance of load being called.
           // var unchecked = $.map($("input:checkbox:not(:checked)"), function(v){
           // 	return v.name;
           // });
