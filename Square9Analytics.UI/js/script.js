@@ -16,7 +16,7 @@ $(function() {
     	axis: { 
     		y: { 
     			label: { 
-    				text: 'Number of actions taken.', position: 'outer-middle'
+    				text: 'Number of actions taken', position: 'outer-middle'
     			}
     		},
     		x: {
