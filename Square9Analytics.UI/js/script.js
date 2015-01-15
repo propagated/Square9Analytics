@@ -67,11 +67,10 @@ $(function() {
     //listeners
     $( "#buttonGet" ).click(function() {
     	//unload any unchecked boxes prior to timeout hack
-    	$("input:checkbox:not(:checked)").each(function (index){
-        //cleanChart($(this).attr("name"));
-        chart.unload({
-        	done: function(){
-        		//chart unload animation breaks async load, timeout hack workaround
+    	if (chart.data().length > 0){
+    		chart.unload({
+    			done: function(){
+	      		//chart unload animation breaks async load, timeout hack workaround
 						//until API supports multiple actions 1 call to avoid multiple unload() calls
 						setTimeout(function(){
 							$("input:checked").each(function (index){
@@ -80,7 +79,12 @@ $(function() {
 						},230);
 					}
 				});
-      });
+    	}
+    	else{
+    		$("input:checked").each(function (index){
+    			getAPIData($(this).val(), $(this).attr("name"));
+    		});
+    	}
     });
 
     $( "#users" ).click(function() {
