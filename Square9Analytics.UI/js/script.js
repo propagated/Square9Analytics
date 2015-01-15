@@ -107,8 +107,8 @@ function getAPIData(action, title){
     	if (data.Log.length > 0) {
         var auditData = parseLog(data.Log, title);
         //TODO: parse data.Users into dropdown issue #20
-        for( index in data.users) {
-            $('#users ul').append('<li><a href="#"</a>' + users[index] +'</li>');
+        for( index in data.Users) {
+            $('#users ul').append('<li><a href="#"</a>' + data.Users[index] +'</li>');
         }
         auditData[0].splice(0,0,'x');
 
