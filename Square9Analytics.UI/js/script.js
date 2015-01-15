@@ -104,27 +104,28 @@ function getAPIData(action, title){
     $.ajax({
     	url: url
     }).done(function(data) {
-    	if (data.Log.length > 0){
-    		var auditData = parseLog(data.Log, title);
-          //TODO: parse data.Users into dropdown issue #20
+    	if (data.Log.length > 0) {
+            var auditData = parseLog(data.Log, title);
+            //TODO: parse data.Users into dropdown issue #20
+            for( index in data.users) {
+                $('#users ul').append('<li><a href="#"</a>' + users[index] +'</li>');
+            }
+            auditData[0].splice(0,0,'x');
 
-          auditData[0].splice(0,0,'x');
-
-          //c3 unload animation breaks loading the chart when called outside chart.load()
-          //if called shorter than 230ms apart. because this is a callback, calling unload()
-          //breaks any instance of load being called.
-          // var unchecked = $.map($("input:checkbox:not(:checked)"), function(v){
-          // 	return v.name;
-          // });
-    chart.load({
-          	//unload: [unchecked],
-          	columns: [
-          	auditData[0],
-          	auditData[1]
-          	]
-          });
-  }
-
+            //c3 unload animation breaks loading the chart when called outside chart.load()
+            //if called shorter than 230ms apart. because this is a callback, calling unload()
+            //breaks any instance of load being called.
+            // var unchecked = $.map($("input:checkbox:not(:checked)"), function(v){
+            // 	return v.name;
+            // });
+            chart.load({
+                //unload: [unchecked],
+                columns: [
+                auditData[0],
+                auditData[1]
+                ]
+            });
+        }
         //testing function, this will fire automatically to test c3 transitions
         // setTimeout(function () {
         //     chart.load({
@@ -135,11 +136,10 @@ function getAPIData(action, title){
         //         ]
         //     });
         // }, 2000);
-
-}).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-	console.log(textStatus);
-	console.log(errorThrown);
-});
+    }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+    	console.log(textStatus);
+    	console.log(errorThrown);
+    });
 }
 
 //parse AuditLog data
