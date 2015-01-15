@@ -13,6 +13,7 @@ $(function() {
     		x: 'x',
     		columns: []
     	},
+
     	axis: { 
     		y: { 
     			label: { 
@@ -30,18 +31,18 @@ $(function() {
     				format: "%m-%d-%Y",
     				rotate:45,
 
-          		//culling: false, //show all ticks (dates may overlap with big data sets)
-          		culling: {
-                max: 15 // the number of tick texts will be adjusted to less than this value
-              }
+        		//culling: false, //show all ticks (dates may overlap with big data sets)
+        		culling: {
+              max: 15 // the number of tick texts will be adjusted to less than this value
             }
           }
-        },
-        padding:{
-        	right:50,
-        	left:50
         }
-      });
+      },
+      padding:{
+      	right:50,
+      	left:50
+      }
+    });
     
     //init date range picker
     startDate = moment().subtract(2, 'months').format("MM/DD/YYYY");
@@ -67,25 +68,24 @@ $(function() {
     $( "#buttonGet" ).click(function() {
     	//unload any unchecked boxes prior to timeout hack
     	$("input:checkbox:not(:checked)").each(function (index){
-          //cleanChart($(this).attr("name"));
-          chart.unload({
-          	done: function(){
-          		//chart unload animation breaks async load, timeout hack workaround
-							//until API supports multiple actions 1 call to avoid multiple unload() calls
-							setTimeout(function(){
-								$("input:checked").each(function (index){
-									getAPIData($(this).val(), $(this).attr("name"));
-								});
-							},230);
-						}
-					});
-        });
+        //cleanChart($(this).attr("name"));
+        chart.unload({
+        	done: function(){
+        		//chart unload animation breaks async load, timeout hack workaround
+						//until API supports multiple actions 1 call to avoid multiple unload() calls
+						setTimeout(function(){
+							$("input:checked").each(function (index){
+								getAPIData($(this).val(), $(this).attr("name"));
+							});
+						},230);
+					}
+				});
+      });
     });
 
-    //user dropdown?
-    // $( "#dropdownMenu1" ).click(function() {
-    //     $('.dropdown-toggle').dropdown();
-    // });
+    $( "#users" ).click(function() {
+        
+    });
 });
 
 //Indexed, AnnotationUpdate, Emailed, Printed, Deleted, and Viewed.
@@ -105,37 +105,37 @@ function getAPIData(action, title){
     	url: url
     }).done(function(data) {
     	if (data.Log.length > 0) {
-            var auditData = parseLog(data.Log, title);
-            //TODO: parse data.Users into dropdown issue #20
-            for( index in data.users) {
-                $('#users ul').append('<li><a href="#"</a>' + users[index] +'</li>');
-            }
-            auditData[0].splice(0,0,'x');
-
-            //c3 unload animation breaks loading the chart when called outside chart.load()
-            //if called shorter than 230ms apart. because this is a callback, calling unload()
-            //breaks any instance of load being called.
-            // var unchecked = $.map($("input:checkbox:not(:checked)"), function(v){
-            // 	return v.name;
-            // });
-            chart.load({
-                //unload: [unchecked],
-                columns: [
-                auditData[0],
-                auditData[1]
-                ]
-            });
+        var auditData = parseLog(data.Log, title);
+        //TODO: parse data.Users into dropdown issue #20
+        for( index in data.users) {
+            $('#users ul').append('<li><a href="#"</a>' + users[index] +'</li>');
         }
-        //testing function, this will fire automatically to test c3 transitions
-        // setTimeout(function () {
-        //     chart.load({
-        //         //unload: ['x', 'Documents Indexed'],
-        //         columns: [
-        //             x1,
-        //             data1
-        //         ]
-        //     });
-        // }, 2000);
+        auditData[0].splice(0,0,'x');
+
+        //c3 unload animation breaks loading the chart when called outside chart.load()
+        //if called shorter than 230ms apart. because this is a callback, calling unload()
+        //breaks any instance of load being called.
+        // var unchecked = $.map($("input:checkbox:not(:checked)"), function(v){
+        // 	return v.name;
+        // });
+        chart.load({
+            //unload: [unchecked],
+            columns: [
+              auditData[0],
+              auditData[1]
+            ]
+        });
+      }
+      //testing function, this will fire automatically to test c3 transitions
+      // setTimeout(function () {
+      //     chart.load({
+      //         //unload: ['x', 'Documents Indexed'],
+      //         columns: [
+      //             x1,
+      //             data1
+      //         ]
+      //     });
+      // }, 2000);
     }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
     	console.log(textStatus);
     	console.log(errorThrown);
