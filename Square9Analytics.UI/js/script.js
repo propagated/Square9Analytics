@@ -91,13 +91,10 @@ $(function() {
 //Indexed, AnnotationUpdate, Emailed, Printed, Deleted, and Viewed.
 function getAPIData(action, title){
     //call out to analytics api with ajax
-    var url = "../../square9analytics/analytics/Actions/GetData";
-
+    var url = "../../square9analytics/analytics/Actions/GetData?startdate=" + startDate + "&enddate=" + endDate + "&action=" + action;
     if ($('#dduser').val()){
-    	url += "/" + encodeURI($('#dduser').val());
+    	url += "&user=" + encodeURI($('#dduser').val());
     }
-    url += "?startdate=" + startDate + "&enddate=" + endDate + "&action=" + action;
-
     $.ajax({
     	url: url
     }).done(function(data) {
