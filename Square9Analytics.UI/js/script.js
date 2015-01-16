@@ -86,10 +86,6 @@ $(function() {
     		});
     	}
     });
-
-    $( "#users" ).click(function() {
-        
-    });
 });
 
 //Indexed, AnnotationUpdate, Emailed, Printed, Deleted, and Viewed.
@@ -97,11 +93,8 @@ function getAPIData(action, title){
     //call out to analytics api with ajax
     var url = "../../square9analytics/analytics/Actions/GetData";
 
-    //TODO: get user from dropdown issue #20
-
-    var user = null;
-    if (user){
-    	url += "/" + user;
+    if ($('#dduser').val()){
+    	url += "/" + encodeURI($('#dduser').val());
     }
     url += "?startdate=" + startDate + "&enddate=" + endDate + "&action=" + action;
 
@@ -110,9 +103,9 @@ function getAPIData(action, title){
     }).done(function(data) {
     	if (data.Log.length > 0) {
         var auditData = parseLog(data.Log, title);
-        //TODO: parse data.Users into dropdown issue #20
         for( index in data.Users) {
-            $('#users ul').append('<li><a href="#"</a>' + data.Users[index] +'</li>');
+        	$('#dduser').append('<option class="username" value="'+ data.Users[index] +'">' + data.Users[index] + '</option>');
+        	$('#dduser').prop('disabled', false);
         }
         auditData[0].splice(0,0,'x');
 
