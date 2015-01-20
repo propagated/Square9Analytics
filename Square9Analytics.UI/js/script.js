@@ -11,7 +11,8 @@ $(function() {
     chart = c3.generate({
     	data: {
     		x: 'x',
-    		columns: []
+    		columns: [],
+        type: 'bar'
     	},
 
     	axis: { 
@@ -25,7 +26,7 @@ $(function() {
     				text: 'Action Dates',
     				position: 'inner-left'
     			},
-    			type : 'timeseries',
+    			type : 'categories',
     			tick: {
     				fit: true,
     				format: "%m-%d-%Y",
