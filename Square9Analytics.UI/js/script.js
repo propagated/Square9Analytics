@@ -23,13 +23,13 @@ $(function() {
     		},
     		x: {
     			label: {
-    				text: 'Action Dates',
-    				position: 'inner-left'
+    				text: 'Date of Action',
+    				position: 'outer-left'
     			},
     			type : 'categories',
     			tick: {
-    				fit: true,
-    				format: "%m-%d-%Y",
+    				//fit: true,
+    				//format: "%m-%d-%Y",
     				rotate:45,
 
         		//culling: false, //show all ticks (dates may overlap with big data sets)
