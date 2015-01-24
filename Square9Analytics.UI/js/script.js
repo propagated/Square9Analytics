@@ -38,7 +38,7 @@ $(function() {
 
                     //culling: false, //show all ticks (dates may overlap with big data sets)
                     culling: {
-                        max: 15 // the number of tick texts will be adjusted to less than this value
+                        max: 11 // the number of tick texts will be adjusted to less than this value
                     }
                 }
             }
@@ -71,13 +71,9 @@ $(function() {
 
     //listeners
     $('#auditlogdates').on('apply.daterangepicker', function(ev, picker) {
-        console.log(picker.startDate.format('YYYY-MM-DD'));
-        console.log(picker.endDate.format('YYYY-MM-DD'));
+        //stub for possible update enhancement
     });
     $( "#buttonGet" ).click(function() {
-      //clear users dropdown
-      $('#dduser').empty();
-      $('#dduser').append('<option value="">All Users</option>');
       getAPIData();
     });
 });
@@ -92,9 +88,10 @@ function getAPIData(){
         actionKeys.push($(this).attr("api-name"));
         url += "&action=" + $(this).val();
     });
-    
+    var selectedUser = "";
     if ($('#dduser').val()){
-    	url += "&user=" + encodeURI($('#dduser').val());
+        selectedUser = $('#dduser').val();
+    	url += "&user=" + encodeURI(selectedUser);
     }
 
     //call out to analytics api with ajax
@@ -103,13 +100,16 @@ function getAPIData(){
     }).done(function(data) {
     	if (data.Log) {
             //users dropdown
-            for(var userIndex in data.Users) {
-            	$('#dduser').append('<option class="username" value="'+ data.Users[userIndex] +'">' + data.Users[userIndex] + '</option>');
-            	$('#dduser').prop('disabled', false);
+            if (!selectedUser)
+            {
+                //clear users dropdown
+                $('#dduser').empty();
+                $('#dduser').append('<option value="">All Users</option>');
+                for(var userIndex in data.Users) {
+                   $('#dduser').append('<option class="username" value="'+ data.Users[userIndex] +'">' + data.Users[userIndex] + '</option>');
+                   $('#dduser').prop('disabled', false);
+                }
             }
-
-            // var auditData = parseLog(data.Log, title);
-            // auditData[0].splice(0,0,'x');
             
             //build rows
             columns.splice(0,0,'x');
@@ -121,9 +121,6 @@ function getAPIData(){
               }
               dataRows.push(row);
             }
-            //c3 unload animation breaks loading the chart when called outside chart.load()
-            //if called shorter than 230ms apart. because this is a callback, calling unload()
-            //breaks any instance of load being called.
 
             //TODO: intersect this against what's actually loaded and only unload those
             var unchecked = $.map($("input:checkbox:not(:checked)"), function(v){
@@ -135,15 +132,6 @@ function getAPIData(){
               unload: unchecked,
               rows: dataRows
             });
-
-            
-            // chart.load({
-            //     unload: [unchecked],
-            //     columns: [
-            //       auditData[0],
-            //       auditData[1]
-            //     ]
-            // });
         }
     }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
     	console.log(textStatus);
