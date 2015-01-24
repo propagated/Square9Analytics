@@ -26,23 +26,27 @@ $(function() {
     				text: 'Date of Action',
     				position: 'outer-left'
     			},
+                //type: 'timeseries',
     			type : 'categories',
     			tick: {
+                    //timeseries properties
     				//fit: true,
     				//format: "%m-%d-%Y",
-    				rotate:45,
 
-        		//culling: false, //show all ticks (dates may overlap with big data sets)
-        		culling: {
-              max: 15 // the number of tick texts will be adjusted to less than this value
+    				//rotate:45,
+                    multiline: false,
+
+                    //culling: false, //show all ticks (dates may overlap with big data sets)
+                    culling: {
+                        max: 15 // the number of tick texts will be adjusted to less than this value
+                    }
+                }
             }
-          }
+        },
+        padding:{
+            right:50,
+            left:50
         }
-      },
-      padding:{
-      	right:50,
-      	left:50
-      }
     });
     
     //init date range picker
@@ -55,82 +59,92 @@ $(function() {
     	format: 'MM/DD/YYYY',
             // startDate: startDate,
             // enddate: endDate
-          },
-          function(start, end, label){
-          	startDate = start.format('MM/DD/YYYY');
-          	endDate = end.format('MM/DD/YYYY');
-          }
-          );
+        },
+        function(start, end, label){
+        	startDate = start.format('MM/DD/YYYY');
+        	endDate = end.format('MM/DD/YYYY');
+        }
+    );
     //set the dates that will appear in the box
     $('#auditlogdates').data('daterangepicker').setStartDate(startDate);
     $('#auditlogdates').data('daterangepicker').setEndDate(endDate);
 
     //listeners
+    $('#auditlogdates').on('apply.daterangepicker', function(ev, picker) {
+        console.log(picker.startDate.format('YYYY-MM-DD'));
+        console.log(picker.endDate.format('YYYY-MM-DD'));
+    });
     $( "#buttonGet" ).click(function() {
-    	//unload any unchecked boxes prior to timeout hack
-    	if (chart.data().length > 0){
-    		chart.unload({
-    			done: function(){
-	      		//chart unload animation breaks async load, timeout hack workaround
-						//until API supports multiple actions 1 call to avoid multiple unload() calls
-						setTimeout(function(){
-							$("input:checked").each(function (index){
-								getAPIData($(this).val(), $(this).attr("name"));
-							});
-						},230);
-					}
-				});
-    	}
-    	else{
-    		$("input:checked").each(function (index){
-    			getAPIData($(this).val(), $(this).attr("name"));
-    		});
-    	}
+      //clear users dropdown
+      $('#dduser').empty();
+      $('#dduser').append('<option value="">All Users</option>');
+      getAPIData();
     });
 });
 
 //Indexed, AnnotationUpdate, Emailed, Printed, Deleted, and Viewed.
-function getAPIData(action, title){
-    //call out to analytics api with ajax
-    var url = "../../square9analytics/analytics/Actions/GetData?startdate=" + startDate + "&enddate=" + endDate + "&action=" + action;
+function getAPIData(){
+    var columns = []; //names as they appear below the chart
+    var actionKeys = []; //keys as they are returned from the API
+    var url = "../../square9analytics/analytics/Actions/GetData?startdate=" + startDate + "&enddate=" + endDate;
+    $("input:checked").each(function (index){
+        columns.push($(this).attr("name"));
+        actionKeys.push($(this).attr("api-name"));
+        url += "&action=" + $(this).val();
+    });
+    
     if ($('#dduser').val()){
     	url += "&user=" + encodeURI($('#dduser').val());
     }
+
+    //call out to analytics api with ajax
     $.ajax({
     	url: url
     }).done(function(data) {
-    	if (data.Log.length > 0) {
-        var auditData = parseLog(data.Log, title);
-        for( index in data.Users) {
-        	$('#dduser').append('<option class="username" value="'+ data.Users[index] +'">' + data.Users[index] + '</option>');
-        	$('#dduser').prop('disabled', false);
-        }
-        auditData[0].splice(0,0,'x');
+    	if (data.Log) {
+            //users dropdown
+            for(var userIndex in data.Users) {
+            	$('#dduser').append('<option class="username" value="'+ data.Users[userIndex] +'">' + data.Users[userIndex] + '</option>');
+            	$('#dduser').prop('disabled', false);
+            }
 
-        //c3 unload animation breaks loading the chart when called outside chart.load()
-        //if called shorter than 230ms apart. because this is a callback, calling unload()
-        //breaks any instance of load being called.
-        // var unchecked = $.map($("input:checkbox:not(:checked)"), function(v){
-        // 	return v.name;
-        // });
-        chart.load({
-            //unload: [unchecked],
-            columns: [
-              auditData[0],
-              auditData[1]
-            ]
-        });
-      }
-      //testing function, this will fire automatically to test c3 transitions
-      // setTimeout(function () {
-      //     chart.load({
-      //         //unload: ['x', 'Documents Indexed'],
-      //         columns: [
-      //             x1,
-      //             data1
-      //         ]
-      //     });
-      // }, 2000);
+            // var auditData = parseLog(data.Log, title);
+            // auditData[0].splice(0,0,'x');
+            
+            //build rows
+            columns.splice(0,0,'x');
+            var dataRows = [columns];
+            for (var logIndex in data.Log){
+              var row = [logIndex];
+              for (var j in actionKeys){
+                row.push(data.Log[logIndex][actionKeys[j]]);
+              }
+              dataRows.push(row);
+            }
+            //c3 unload animation breaks loading the chart when called outside chart.load()
+            //if called shorter than 230ms apart. because this is a callback, calling unload()
+            //breaks any instance of load being called.
+
+            //TODO: intersect this against what's actually loaded and only unload those
+            var unchecked = $.map($("input:checkbox:not(:checked)"), function(v){
+              return v.name;
+            });
+
+            //load chart
+            chart.load({
+              unload: unchecked,
+              rows: dataRows
+            });
+
+            
+            // chart.load({
+            //     unload: [unchecked],
+            //     columns: [
+            //       auditData[0],
+            //       auditData[1]
+            //     ]
+            // });
+        }
     }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
     	console.log(textStatus);
     	console.log(errorThrown);
@@ -160,33 +174,68 @@ var parseLog = function(data, auditAction){
 	return [dates , counts];
 };
 
-// //test data
-// var parseTestLog = [
-//     {
-//         'Date': '2013-09-15',
-//         'Action': 'Document Indexed'
+var parseLog2 = function(data){
+  var parsed = [];
+  for (var date in data.Log){
+    
+  }
+};
+
+
+//test data
+// var testData = { "Log": {
+//     "11/25/2014": {
+//         "Document Indexed": 1,
+//         "Document Viewed": 2
 //     },
-//     {
-//         'Date': '2013-09-15',
-//         'Action': 'Document Indexed'
+//     "12/3/2014": {
+//         "Document Indexed": 1,
+//         "Document Viewed": 2
 //     },
-//     {
-//         'Date': '2013-09-24',
-//         'Action': 'Document Indexed'
+//     "12/4/2014": {
+//         "Document Indexed": 1,
+//         "Document Viewed": 5
 //     },
-//     {
-//         'Date': '2013-09-30',
-//         'Action': 'Document Indexed'
+//     "12/18/2014": {
+//         "Document Indexed": 5,
+//         "Document Viewed": 5
 //     },
-//     {
-//         'Date': '2013-09-30',
-//         'Action': 'Document Indexed'
+//     "12/19/2014": {
+//         "Document Indexed": 4,
+//         "Document Viewed": 7
 //     },
-//     {
-//         'Date': '2013-10-03',
-//         'Action': 'Document Indexed'
+//     "1/19/2015": {
+//         "Document Indexed": 3,
+//         "Document Viewed": 12
+//     },
+//     "11/18/2014": {
+//         "Document Viewed": 3,
+//         "Document Indexed": 0
+//     },
+//     "12/17/2014": {
+//         "Document Viewed": 3,
+//         "Document Indexed": 0
+//     },
+//     "1/13/2015": {
+//         "Document Viewed": 4,
+//         "Document Indexed": 0
+//     },
+//     "1/20/2015": {
+//         "Document Viewed": 1,
+//         "Document Indexed": 0
 //     }
-// ];
+// }
+// };
 
 //var x1 = ['x', '2013-10-31', '2013-12-31', '2014-01-31', '2014-02-28', '2014-03-8', '2014-03-20', '2014-03-21', '2014-03-22'];
 //var data1 = ['Documents Indexed', 4,4,4,3,2,6,2,1];
+//testing function, this will fire automatically to test c3 transitions
+// setTimeout(function () {
+//     chart.load({
+//         //unload: ['x', 'Documents Indexed'],
+//         columns: [
+//             x1,
+//             data1
+//         ]
+//     });
+// }, 2000);
