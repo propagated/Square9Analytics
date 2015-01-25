@@ -1,9 +1,8 @@
 //init global variables
-//var auditData;
 var chart;
 //chart date range
-var startDate;// = '10/1/2014';//test data
-var endDate;// = '9/1/2014';
+var startDate;
+var endDate;
 
 //document load
 $(function() {
@@ -136,11 +135,6 @@ function getAPIData(selectedUser){
     });
 }
 
-//parse AuditLog data
-var parseLog = function(log){
-	
-};
-
 var getUnchecked = function(){
     //TODO: intersect this against what's actually loaded and only return those
     return $.map($("input:checkbox:not(:checked)"), function(v){
@@ -157,9 +151,6 @@ function resetUserDropdown(users){
        $('#dduser').prop('disabled', false);
     }
 }
-
-
-
 
 //test data
 // var testData = { "Log": {
