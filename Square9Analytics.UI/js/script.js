@@ -73,13 +73,19 @@ $(function() {
     $('#auditlogdates').on('apply.daterangepicker', function(ev, picker) {
         //stub for possible update enhancement
     });
+
     $( "#buttonGet" ).click(function() {
-      getAPIData();
+        var selectedUser = "";
+        if ($('#dduser').val()){
+            selectedUser = $('#dduser').val();
+            url += "&user=" + encodeURI(selectedUser);
+        }
+        getAPIData(selectedUser);
     });
 });
 
 //Indexed, AnnotationUpdate, Emailed, Printed, Deleted, and Viewed.
-function getAPIData(){
+function getAPIData(selectedUser){
     var columns = []; //names as they appear below the chart
     var actionKeys = []; //keys as they are returned from the API
     var url = "../../square9analytics/analytics/Actions/GetData?startdate=" + startDate + "&enddate=" + endDate;
@@ -88,11 +94,6 @@ function getAPIData(){
         actionKeys.push($(this).attr("api-name"));
         url += "&action=" + $(this).val();
     });
-    var selectedUser = "";
-    if ($('#dduser').val()){
-        selectedUser = $('#dduser').val();
-    	url += "&user=" + encodeURI(selectedUser);
-    }
 
     //call out to analytics api with ajax
     $.ajax({
@@ -102,18 +103,16 @@ function getAPIData(){
             //users dropdown
             if (!selectedUser)
             {
-                //clear users dropdown
-                $('#dduser').empty();
-                $('#dduser').append('<option value="">All Users</option>');
-                for(var userIndex in data.Users) {
-                   $('#dduser').append('<option class="username" value="'+ data.Users[userIndex] +'">' + data.Users[userIndex] + '</option>');
-                   $('#dduser').prop('disabled', false);
-                }
+                resetUserDropdown(data.Users);
             }
             
             //build rows
             columns.splice(0,0,'x');
             var dataRows = [columns];
+            // data.Log.forEach(function(element, index, array){
+            //     console.Log(index);
+            // });
+
             for (var logIndex in data.Log){
               var row = [logIndex];
               for (var j in actionKeys){
@@ -122,10 +121,7 @@ function getAPIData(){
               dataRows.push(row);
             }
 
-            //TODO: intersect this against what's actually loaded and only unload those
-            var unchecked = $.map($("input:checkbox:not(:checked)"), function(v){
-              return v.name;
-            });
+            var unchecked = getUnchecked();
 
             //load chart
             chart.load({
@@ -140,34 +136,28 @@ function getAPIData(){
 }
 
 //parse AuditLog data
-var parseLog = function(data, auditAction){
-	var parsedDates = {};
-
-	var dates = [];
-	var counts = [];
-
-	for (var i = 0; i < data.length;i++)
-	{
-		var date = data[i].Date;
-		//parsedDates[date] = parsedDates[date] ? parsedDates[date] + 1 : 1;
-		parsedDates[date] = parsedDates[date] ? parsedDates[date] + 1 : 1;
-	}
-	counts.push(auditAction);
-	for (var property in parsedDates) {
-		if (parsedDates.hasOwnProperty(property)) {
-			dates.push(property);
-			counts.push(parsedDates[property]);
-		}
-	}
-	return [dates , counts];
+var parseLog = function(log){
+	
 };
 
-var parseLog2 = function(data){
-  var parsed = [];
-  for (var date in data.Log){
-    
-  }
+var getUnchecked = function(){
+    //TODO: intersect this against what's actually loaded and only return those
+    return $.map($("input:checkbox:not(:checked)"), function(v){
+      return v.name;
+  });
 };
+
+function resetUserDropdown(users){
+    //clear users dropdown
+    $('#dduser').empty();
+    $('#dduser').append('<option value="">All Users</option>');
+    for(var userIndex in users) {
+       $('#dduser').append('<option class="username" value="'+ users[userIndex] +'">' + users[userIndex] + '</option>');
+       $('#dduser').prop('disabled', false);
+    }
+}
+
+
 
 
 //test data
