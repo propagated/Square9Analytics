@@ -39,7 +39,7 @@
 		<div class="well">
 			<!--actions checkboxes -->
 			<div class="row">
-				<div class="col-sm-4">
+				<div class="col-md-4 col-sm-4">
 					<div>
 						<input type="checkbox" id="chk_view" api-name="Document Viewed" name="Documents Viewed" value="viewed" />
 						<label for="chk_view" class="actionLabel">Documents Viewed</label>
@@ -49,7 +49,7 @@
 						<label for="chk_index" class="actionLabel">Documents Indexed</label>
 					</div>
 				</div>
-				<div class="col-sm-4">
+				<div class="col-md-4 col-sm-4">
 					<div>
 						<input type="checkbox" id="chk_anno" api-name="Document Annotation Data Updated" name="Annotations Updated" value="annotationupdate" />
 						<label for="chk_anno" class="actionLabel">Annotation Updated</label>
@@ -59,7 +59,7 @@
 						<label for="chk_del" class="actionLabel">Documents Deleted</label>
 					</div>
 				</div>
-				<div class="col-sm-4">
+				<div class="col-md-4 col-sm-4">
 					<div>
 						<input type="checkbox" id="chk_print" api-name="Document Printed" name="Documents Printed" value="printed" />
 						<label for="chk_print" class="actionLabel">Documents Printed</label>
@@ -69,15 +69,16 @@
 						<label for="chk_email" class="actionLabel">Documents Emailed</label>
 					</div>  
 				</div>
-				<div class="row">
+			</div>
+			<div class="row">
 				<div class="col-md-4 col-sm-4 userRow">
-						<select id="dduser"class="form-control" placeholder="User Filter"  disabled>
-							<option value="">All Users</option>
-						</select>
-					</div>
+					<select id="dduser"class="form-control" placeholder="User Filter"  disabled>
+						<option value="">All Users</option>
+					</select>
 				</div>
 			</div>
 		</div>
+
 
 		<div>
 			<button type="button" id="buttonGet" class="btn btn-success">Get Data</button>
