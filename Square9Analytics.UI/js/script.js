@@ -107,20 +107,21 @@ function getAPIData(selectedUser){
             }
             
             //build rows
-            columns.splice(0,0,'x');
-            var dataRows = [columns];
-            // data.Log.forEach(function(element, index, array){
-            //     console.Log(index);
-            // });
+            var dataRows = [];
 
             for (var logIndex in data.Log){
-              var row = [logIndex];
-              for (var j in actionKeys){
-                row.push(data.Log[logIndex][actionKeys[j]]);
-              }
-              dataRows.push(row);
+                var row = [logIndex];
+                for (var j in actionKeys){
+                    row.push(data.Log[logIndex][actionKeys[j]]);
+                }
+                dataRows.push(row);
             }
 
+            dataRows.sort(function(a,b){
+                return new Date(a[0]) -  new Date(b[0]);
+            });
+            columns.splice(0,0,'x');
+            dataRows.splice(0,0,columns);
             var unchecked = getUnchecked();
 
             //load chart
