@@ -70,15 +70,10 @@ $(function() {
 
     //listeners
     $('#auditlogdates').on('apply.daterangepicker', function(ev, picker) {
-        //stub for possible update enhancement
+        getAPIData(getFilters());
     });
 
     $( "#buttonGet" ).click(function() {
-        // var selectedUser = "";
-        // if ($('#dduser').val()){
-        //     selectedUser = $('#dduser').val();
-        //     //url += "&user=" + encodeURI(selectedUser);
-        // }
         getAPIData(getFilters());
     });
 });
