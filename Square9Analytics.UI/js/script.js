@@ -74,66 +74,91 @@ $(function() {
     });
 
     $( "#buttonGet" ).click(function() {
-        var selectedUser = "";
-        if ($('#dduser').val()){
-            selectedUser = $('#dduser').val();
-            url += "&user=" + encodeURI(selectedUser);
-        }
-        getAPIData(selectedUser);
+        // var selectedUser = "";
+        // if ($('#dduser').val()){
+        //     selectedUser = $('#dduser').val();
+        //     //url += "&user=" + encodeURI(selectedUser);
+        // }
+        getAPIData(getFilters());
     });
 });
 
 //Indexed, AnnotationUpdate, Emailed, Printed, Deleted, and Viewed.
-function getAPIData(selectedUser){
-    var columns = []; //names as they appear below the chart
-    var actionKeys = []; //keys as they are returned from the API
+function getAPIData(filters){
     var url = "../../square9analytics/analytics/Actions/GetData?startdate=" + startDate + "&enddate=" + endDate;
-    $("input:checked").each(function (index){
-        columns.push($(this).attr("name"));
-        actionKeys.push($(this).attr("api-name"));
-        url += "&action=" + $(this).val();
-    });
-
-    //call out to analytics api with ajax
-    $.ajax({
-    	url: url
-    }).done(function(data) {
-    	if (data.Log) {
-            //users dropdown
-            if (!selectedUser)
-            {
-                resetUserDropdown(data.Users);
-            }
-            
-            //build rows
-            var dataRows = [];
-
-            for (var logIndex in data.Log){
-                var row = [logIndex];
-                for (var j in actionKeys){
-                    row.push(data.Log[logIndex][actionKeys[j]]);
-                }
-                dataRows.push(row);
-            }
-
-            dataRows.sort(function(a,b){
-                return new Date(a[0]) -  new Date(b[0]);
-            });
-            columns.splice(0,0,'x');
-            dataRows.splice(0,0,columns);
-            var unchecked = getUnchecked();
-
-            //load chart
-            chart.load({
-              unload: unchecked,
-              rows: dataRows
-            });
+    if (filters.actionVals.length > 0){
+        if (filters.selectedUser){
+            url += "&user=" + encodeURI(filters.selectedUser);
         }
-    }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-    	console.log(textStatus);
-    	console.log(errorThrown);
-    });
+        for (var actionIndex in filters.actionVals){
+            url += "&action=" + filters.actionVals[actionIndex];
+        }
+        //call out to analytics api with ajax
+        $.ajax({
+        	url: url
+        }).done(function(data) {
+        	if (data.Log) {
+                //users dropdown
+                if (!filters.selectedUser)
+                {
+                    resetUserDropdown(data.Users);
+                }
+                
+                //build rows
+                var dataRows = [];
+
+                for (var logIndex in data.Log){
+                    var row = [logIndex];
+                    for (var j in filters.actionKeys){
+                        row.push(data.Log[logIndex][filters.actionKeys[j]]);
+                    }
+                    dataRows.push(row);
+                }
+
+                dataRows.sort(function(a,b){
+                    return new Date(a[0]) -  new Date(b[0]);
+                });
+                filters.columns.splice(0,0,'x');
+                dataRows.splice(0,0,filters.columns);
+
+                var unchecked = getUnchecked();
+                //load chart
+                chart.load({
+                  unload: unchecked,
+                  rows: dataRows
+                });
+            }
+        }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+        	console.log(textStatus);
+        	console.log(errorThrown);
+        });
+    }
+    else
+    {
+        //nothing checked, unload chart
+        resetUserDropdown();
+        chart.unload();
+    }
 }
+
+var getFilters = function(){
+    var filters = {
+        columns : [],    //names as they appear below the chart
+        actionKeys : [], //keys as they are returned from the API
+        actionVals : [], //action names to be passed to the API
+        selectedUser: '' //optional username filter
+    };
+    $("input:checked").each(function (index){
+        filters.columns.push($(this).attr("name"));
+        filters.actionKeys.push($(this).attr("api-name"));
+        filters.actionVals.push($(this).val());
+    });
+    if ($('#dduser').val()){
+        filters.selectedUser = $('#dduser').val();
+    }
+
+    return filters;
+};
 
 var getUnchecked = function(){
     //TODO: intersect this against what's actually loaded and only return those
@@ -146,9 +171,11 @@ function resetUserDropdown(users){
     //clear users dropdown
     $('#dduser').empty();
     $('#dduser').append('<option value="">All Users</option>');
-    for(var userIndex in users) {
-       $('#dduser').append('<option class="username" value="'+ users[userIndex] +'">' + users[userIndex] + '</option>');
-       $('#dduser').prop('disabled', false);
+    if (users){
+        for(var userIndex in users) {
+           $('#dduser').append('<option class="username" value="'+ users[userIndex] +'">' + users[userIndex] + '</option>');
+           $('#dduser').prop('disabled', false);
+        }
     }
 }
 
