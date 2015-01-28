@@ -17,7 +17,8 @@ $(function() {
     	axis: { 
     		y: { 
     			label: { 
-    				text: 'Number of actions taken', position: 'outer-middle'
+    				text: 'Number of actions taken', 
+                    position: 'outer-middle'
     			}
     		},
     		x: {
@@ -94,10 +95,10 @@ function getAPIData(filters){
         }).done(function(data) {
         	if (data.Log) {
                 //users dropdown
-                if (!filters.selectedUser)
-                {
-                    resetUserDropdown(data.Users);
-                }
+                // if (!filters.selectedUser)
+                // {
+                    resetUserDropdown(data.Users, filters.selectedUser);
+                //}
                 
                 //build rows
                 var dataRows = [];
@@ -162,14 +163,22 @@ var getUnchecked = function(){
   });
 };
 
-function resetUserDropdown(users){
+function resetUserDropdown(users, selectedUser){
     //clear users dropdown
-    $('#dduser').empty();
-    $('#dduser').append('<option value="">All Users</option>');
     if (users){
+        $('#dduser').empty();
+        $('#dduser').append('<option value="">All Users</option>');
+        $('#dduser').prop('disabled', false);
         for(var userIndex in users) {
-           $('#dduser').append('<option class="username" value="'+ users[userIndex] +'">' + users[userIndex] + '</option>');
-           $('#dduser').prop('disabled', false);
+            var option = '<option class="username" value="'+ users[userIndex] +'"';
+            if (selectedUser && selectedUser === users[userIndex]){
+                option += ' selected>';
+            }
+            else{
+                option += '>';
+            }
+            option += users[userIndex] + '</option>';
+           $('#dduser').append(option);
         }
     }
 }
