@@ -124,9 +124,9 @@ function getAPIData(filters){
                   rows: dataRows
                 });
             }
-        }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-        	console.log(textStatus);
-        	console.log(errorThrown);
+        }).fail(function(response, textStatus, errorThrown) {
+        	console.log("Error: " + errorThrown + ": " + response.responseText);
+        	alert("Error: " + errorThrown + ": " + response.responseText);
         });
     }
     else
@@ -160,7 +160,7 @@ var getUnchecked = function(){
     //TODO: intersect this against what's actually loaded and only return those
     return $.map($("input:checkbox:not(:checked)"), function(v){
       return v.name;
-  });
+    });
 };
 
 function resetUserDropdown(users, selectedUser){
