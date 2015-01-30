@@ -138,9 +138,9 @@ function getAPIData(filters) {
           rows: dataRows
         });
       }
-        }).fail(function(response, textStatus, errorThrown) {
-        	console.log("Error: " + errorThrown + ": " + response.responseText);
-        	alert("Error: " + errorThrown + ": " + response.responseText);
+    }).fail(function(response, textStatus, errorThrown) {
+      console.log("Error: " + errorThrown + ": " + response.responseText);
+      alert("Error: " + errorThrown + ": " + response.responseText);
     });
   } else {
     //nothing checked, unload chart
@@ -153,7 +153,7 @@ var getUnchecked = function() {
   //TODO: intersect this against what's actually loaded and only return those
   return $.map($("input:checkbox:not(:checked)"), function(v) {
     return v.name;
-    });
+  });
 };
 
 function resetUserDropdown(users, selectedUser) {
