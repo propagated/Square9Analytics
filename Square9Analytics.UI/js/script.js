@@ -6,181 +6,174 @@ var endDate;
 
 //document load
 $(function() {
-    //init chart
-    chart = c3.generate({
-    	data: {
-    		x: 'x',
-    		columns: [],
-        type: 'bar'
-    	},
+  //init chart
+  chart = c3.generate({
+    data: {
+      x: 'x',
+      columns: [],
+      type: 'bar'
+    },
 
-    	axis: { 
-    		y: { 
-    			label: { 
-    				text: 'Number of actions taken', 
-                    position: 'outer-middle'
-    			}
-    		},
-    		x: {
-    			label: {
-    				text: 'Date of Action',
-    				position: 'outer-left'
-    			},
-                //type: 'timeseries',
-    			type : 'categories',
-    			tick: {
-                    //timeseries properties
-    				//fit: true,
-    				//format: "%m-%d-%Y",
-
-    				//rotate:45,
-                    multiline: false,
-
-                    //culling: false, //show all ticks (dates may overlap with big data sets)
-                    culling: {
-                        max: 11 // the number of tick texts will be adjusted to less than this value
-                    }
-                }
-            }
-        },
-        padding:{
-            right:50,
-            left:50
+    axis: {
+      y: {
+        label: {
+          text: 'Number of actions taken',
+          position: 'outer-middle'
         }
-    });
-    
-    //init date range picker
-    startDate = moment().subtract(2, 'months').format("MM/DD/YYYY");
-    endDate = moment().format("MM/DD/YYYY");
-    $('#auditlogdates').daterangepicker(
-    { 
-    	timePicker: false, 
-    	timePickerIncrement: 30, 
-    	format: 'MM/DD/YYYY',
-            // startDate: startDate,
-            // enddate: endDate
+      },
+      x: {
+        label: {
+          text: 'Date of Action',
+          position: 'outer-left'
         },
-        function(start, end, label){
-        	startDate = start.format('MM/DD/YYYY');
-        	endDate = end.format('MM/DD/YYYY');
+        //type: 'timeseries',
+        type: 'categories',
+        tick: {
+          //timeseries properties
+          //fit: true,
+          //format: "%m-%d-%Y",
+
+          //rotate:45,
+          multiline: false,
+
+          //culling: false, //show all ticks (dates may overlap with big data sets)
+          culling: {
+            max: 11 // the number of tick texts will be adjusted to less than this value
+          }
         }
-    );
-    //set the dates that will appear in the box
-    $('#auditlogdates').data('daterangepicker').setStartDate(startDate);
-    $('#auditlogdates').data('daterangepicker').setEndDate(endDate);
+      }
+    },
+    padding: {
+      right: 50,
+      left: 50
+    }
+  });
 
-    //listeners
-    $('#auditlogdates').on('apply.daterangepicker', function(ev, picker) {
-        getAPIData(getFilters());
-    });
+  //init date range picker
+  startDate = moment().subtract(2, 'months').format("MM/DD/YYYY");
+  endDate = moment().format("MM/DD/YYYY");
+  var $auditlogdates = $('#auditlogdates');
+  $auditlogdates.daterangepicker({
+      timePicker: false,
+      format: 'MM/DD/YYYY',
+      // startDate: startDate,
+      // enddate: endDate
+    },
+    function(start, end, label) {
+      startDate = start.format('MM/DD/YYYY');
+      endDate = end.format('MM/DD/YYYY');
+    }
+  );
+  //set the dates that will appear in the box
+  $auditlogdates.data('daterangepicker').setStartDate(startDate);
+  $auditlogdates.data('daterangepicker').setEndDate(endDate);
 
-    $( "#buttonGet" ).click(function() {
-        getAPIData(getFilters());
-    });
+  //listeners
+  $auditlogdates.on('apply.daterangepicker', function(ev, picker) {
+    getAPIData(getFilters());
+  });
+
+  $("#buttonGet").click(function() {
+    getAPIData(getFilters());
+  });
 });
 
-//Indexed, AnnotationUpdate, Emailed, Printed, Deleted, and Viewed.
-function getAPIData(filters){
-    var url = "../../square9analytics/analytics/Actions/GetData?startdate=" + startDate + "&enddate=" + endDate;
-    if (filters.actionVals.length > 0){
-        if (filters.selectedUser){
-            url += "&user=" + encodeURI(filters.selectedUser);
-        }
-        for (var actionIndex in filters.actionVals){
-            url += "&action=" + filters.actionVals[actionIndex];
-        }
-        //call out to analytics api with ajax
-        $.ajax({
-        	url: url
-        }).done(function(data) {
-        	if (data.Log) {
-                //users dropdown
-                // if (!filters.selectedUser)
-                // {
-                    resetUserDropdown(data.Users, filters.selectedUser);
-                //}
-                
-                //build rows
-                var dataRows = [];
+var getFilters = function() {
+  var filters = {
+    columns: [], //names as they appear below the chart
+    actionKeys: [], //keys as they are returned from the API
+    actionVals: [], //action names to be passed to the API
+    selectedUser: '' //optional username filter
+  };
+  $("input:checked").each(function(index) {
+    filters.columns.push($(this).attr("name"));
+    filters.actionKeys.push($(this).attr("api-name"));
+    filters.actionVals.push($(this).val());
+  });
+  var $dduser = $('#dduser');
+  if ($dduser.val()) {
+    filters.selectedUser = $dduser.val();
+  }
 
-                for (var logIndex in data.Log){
-                    var row = [logIndex];
-                    for (var j in filters.actionKeys){
-                        row.push(data.Log[logIndex][filters.actionKeys[j]]);
-                    }
-                    dataRows.push(row);
-                }
-
-                dataRows.sort(function(a,b){
-                    return new Date(a[0]) -  new Date(b[0]);
-                });
-                filters.columns.splice(0,0,'x');
-                dataRows.splice(0,0,filters.columns);
-
-                var unchecked = getUnchecked();
-                //load chart
-                chart.load({
-                  unload: unchecked,
-                  rows: dataRows
-                });
-            }
-        }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-        	console.log(textStatus);
-        	console.log(errorThrown);
-        });
-    }
-    else
-    {
-        //nothing checked, unload chart
-        resetUserDropdown();
-        chart.unload();
-    }
-}
-
-var getFilters = function(){
-    var filters = {
-        columns : [],    //names as they appear below the chart
-        actionKeys : [], //keys as they are returned from the API
-        actionVals : [], //action names to be passed to the API
-        selectedUser: '' //optional username filter
-    };
-    $("input:checked").each(function (index){
-        filters.columns.push($(this).attr("name"));
-        filters.actionKeys.push($(this).attr("api-name"));
-        filters.actionVals.push($(this).val());
-    });
-    if ($('#dduser').val()){
-        filters.selectedUser = $('#dduser').val();
-    }
-
-    return filters;
+  return filters;
 };
 
-var getUnchecked = function(){
-    //TODO: intersect this against what's actually loaded and only return those
-    return $.map($("input:checkbox:not(:checked)"), function(v){
-      return v.name;
+//Indexed, AnnotationUpdate, Emailed, Printed, Deleted, and Viewed.
+function getAPIData(filters) {
+  var url = "../../square9analytics/analytics/Actions/GetData?startdate=" + startDate + "&enddate=" + endDate;
+  if (filters.actionVals.length > 0) {
+    if (filters.selectedUser) {
+      url += "&user=" + encodeURI(filters.selectedUser);
+    }
+    for (var actionIndex in filters.actionVals) {
+      url += "&action=" + filters.actionVals[actionIndex];
+    }
+    //call out to analytics api with ajax
+    $.ajax({
+      url: url
+    }).done(function(data) {
+      if (data.Log) {
+        //users dropdown
+        resetUserDropdown(data.Users, filters.selectedUser);
+
+        //build rows
+        var dataRows = [];
+        for (var logIndex in data.Log) {
+          var row = [logIndex];
+          for (var j in filters.actionKeys) {
+            row.push(data.Log[logIndex][filters.actionKeys[j]]);
+          }
+          dataRows.push(row);
+        }
+
+        dataRows.sort(function(a, b) {
+          return new Date(a[0]) - new Date(b[0]);
+        });
+        filters.columns.splice(0, 0, 'x');
+        dataRows.splice(0, 0, filters.columns);
+
+        //load chart
+        chart.load({
+          unload: getUnchecked(),
+          rows: dataRows
+        });
+      }
+    }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+      console.log(textStatus);
+      console.log(errorThrown);
+    });
+  } else {
+    //nothing checked, unload chart
+    resetUserDropdown();
+    chart.unload();
+  }
+}
+
+var getUnchecked = function() {
+  //TODO: intersect this against what's actually loaded and only return those
+  return $.map($("input:checkbox:not(:checked)"), function(v) {
+    return v.name;
   });
 };
 
-function resetUserDropdown(users, selectedUser){
-    //clear users dropdown
-    if (users){
-        $('#dduser').empty();
-        $('#dduser').append('<option value="">All Users</option>');
-        $('#dduser').prop('disabled', false);
-        for(var userIndex in users) {
-            var option = '<option class="username" value="'+ users[userIndex] +'"';
-            if (selectedUser && selectedUser === users[userIndex]){
-                option += ' selected>';
-            }
-            else{
-                option += '>';
-            }
-            option += users[userIndex] + '</option>';
-           $('#dduser').append(option);
-        }
+function resetUserDropdown(users, selectedUser) {
+  //clear users dropdown
+  if (users) {
+    var $dduser = $('#dduser');
+    $dduser.empty();
+    $dduser.append('<option value="">All Users</option>');
+    $dduser.prop('disabled', false);
+    for (var userIndex in users) {
+      var option = '<option class="username" value="' + users[userIndex] + '"';
+      if (selectedUser && selectedUser === users[userIndex]) {
+        option += ' selected>';
+      } else {
+        option += '>';
+      }
+      option += users[userIndex] + '</option>';
+      $dduser.append(option);
     }
+  }
 }
 
 //test data

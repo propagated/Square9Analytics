@@ -1,88 +1,90 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Audit Log Analytics</title>
-	<link data-require="bootstrap-css@3.1.1" data-semver="3.1.1" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
-	<script data-require="jquery@*" data-semver="2.1.1" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <title>Audit Log Analytics</title>
+    <link data-require="bootstrap-css@3.1.1" data-semver="3.1.1" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+    <script data-require="jquery@*" data-semver="2.1.1" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
-	<link href="css/c3.css" rel="stylesheet" type="text/css" />
-	<script src="lib/d3.min.js" charset="utf-8"></script>
-	<script src="lib/c3.js"></script>
+    <link href="css/c3.css" rel="stylesheet" type="text/css" />
+    <script src="lib/d3.min.js" charset="utf-8"></script>
+    <script src="lib/c3.js"></script>
 
-	<script src="js/script.js"></script>
+    <script src="js/script.js"></script>
 
-	<script src="lib/moment.js"></script>
-	<script src="lib/daterangepicker.js"></script>
-	<link rel="stylesheet" href="css/daterangepicker-bs3.css" />
+    <script src="lib/moment.js"></script>
+    <script src="lib/daterangepicker.js"></script>
+    <link rel="stylesheet" href="css/daterangepicker-bs3.css" />
 
 
-	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
-	<link rel="stylesheet" href="css/style.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
-	<div class='container'>
-		<div id="chart"></div>
+    <div class='container'>
+        <div id="chart"></div>
 
-		<div class="form-group">
-			<label for="auditlogdates">Audit Log Dates:</label>
-			<div class="input-group  col-sm-4">
-				<span class="input-group-addon">
+        <div class="form-group">
+            <label for="auditlogdates">Audit Log Dates:</label>
+            <div class="input-group  col-sm-4">
+                <span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
-				<input type="text" name="auditlog" id="auditlogdates" class="form-control" value="" />
-			</div>
-		</div>
+                <input type="text" name="auditlog" id="auditlogdates" class="form-control" value="" />
+            </div>
+        </div>
 
-		<div class="wellLabel">Filters:</div>
-		<div class="well">
-			<!--actions checkboxes -->
-			<div class="row">
-				<div class="col-md-4 col-sm-4">
-					<div>
-						<input type="checkbox" id="chk_view" api-name="Document Viewed" name="Documents Viewed" value="viewed" />
-						<label for="chk_view" class="actionLabel">Documents Viewed</label>
-					</div>
-					<div>
-						<input type="checkbox" id="chk_index" api-name="Document Indexed" name="Documents Indexed" value="indexed" checked />
-						<label for="chk_index" class="actionLabel">Documents Indexed</label>
-					</div>
-				</div>
-				<div class="col-md-4 col-sm-4">
-					<div>
-						<input type="checkbox" id="chk_anno" api-name="Document Annotation Data Updated" name="Annotations Updated" value="annotationupdate" />
-						<label for="chk_anno" class="actionLabel">Annotation Updated</label>
-					</div>
-					<div>
-						<input type="checkbox" id="chk_del" api-name="Document Deleted" name="Documents Deleted" value="deleted" />
-						<label for="chk_del" class="actionLabel">Documents Deleted</label>
-					</div>
-				</div>
-				<div class="col-md-4 col-sm-4">
-					<div>
-						<input type="checkbox" id="chk_print" api-name="Document Printed" name="Documents Printed" value="printed" />
-						<label for="chk_print" class="actionLabel">Documents Printed</label>
-					</div>
-					<div>
-						<input type="checkbox" id="chk_email" api-name="Document Emailed" name="Documents Emailed" value="emailed" />
-						<label for="chk_email" class="actionLabel">Documents Emailed</label>
-					</div>  
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-4 col-sm-4 userRow">
-					<select id="dduser"class="form-control" placeholder="User Filter"  disabled>
-						<option value="">All Users</option>
-					</select>
-				</div>
-			</div>
-		</div>
+        <div class="wellLabel">Filters:</div>
+        <div class="well">
+            <!--actions checkboxes -->
+            <div class="row">
+                <div class="col-md-4 col-sm-4">
+                    <div>
+                        <input type="checkbox" id="chk_view" api-name="Document Viewed" name="Documents Viewed" value="viewed" />
+                        <label for="chk_view" class="actionLabel">Documents Viewed</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="chk_index" api-name="Document Indexed" name="Documents Indexed" value="indexed" checked />
+                        <label for="chk_index" class="actionLabel">Documents Indexed</label>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <div>
+                        <input type="checkbox" id="chk_anno" api-name="Document Annotation Data Updated" name="Annotations Updated" value="annotationupdate" />
+                        <label for="chk_anno" class="actionLabel">Annotation Updated</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="chk_del" api-name="Document Deleted" name="Documents Deleted" value="deleted" />
+                        <label for="chk_del" class="actionLabel">Documents Deleted</label>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <div>
+                        <input type="checkbox" id="chk_print" api-name="Document Printed" name="Documents Printed" value="printed" />
+                        <label for="chk_print" class="actionLabel">Documents Printed</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="chk_email" api-name="Document Emailed" name="Documents Emailed" value="emailed" />
+                        <label for="chk_email" class="actionLabel">Documents Emailed</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-sm-4 userRow">
+                    <select id="dduser" class="form-control" placeholder="User Filter" disabled>
+                        <option value="">All Users</option>
+                    </select>
+                </div>
+            </div>
+        </div>
 
 
-		<div>
-			<button type="button" id="buttonGet" class="btn btn-success">Get Data</button>
-		</div>
-	</div>
+        <div>
+            <button type="button" id="buttonGet" class="btn btn-success">Get Data</button>
+        </div>
+    </div>
 </body>
+
 </html>
