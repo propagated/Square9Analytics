@@ -6,6 +6,9 @@
     <link data-require="bootstrap-css@3.1.1" data-semver="3.1.1" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
     <script data-require="jquery@*" data-semver="2.1.1" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/ladda-themeless.min.css">
+    <script src="lib/spin.min.js"></script>
+    <script src="lib/ladda.min.js"></script>
 
     <link href="css/c3.css" rel="stylesheet" type="text/css" />
     <script src="lib/d3.min.js" charset="utf-8"></script>
@@ -80,9 +83,8 @@
             </div>
         </div>
 
-
         <div>
-            <button type="button" id="buttonGet" class="btn btn-success">Get Data</button>
+            <button type="button" id="buttonGet" class="btn btn-success ladda-button" data-style="zoom-out" data-size="1"><span  class="ladda-label">Get Data</span></button>
         </div>
     </div>
 </body>

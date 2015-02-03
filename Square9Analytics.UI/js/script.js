@@ -3,6 +3,7 @@ var chart;
 //chart date range
 var startDate;
 var endDate;
+var ladda;
 
 //document load
 $(function() {
@@ -74,6 +75,9 @@ $(function() {
   });
 
   $("#buttonGet").click(function() {
+    ladda = Ladda.create(this);
+    //Ladda
+    ladda.start();
     getAPIData(getFilters());
   });
 });
@@ -141,6 +145,8 @@ function getAPIData(filters) {
     }).fail(function(response, textStatus, errorThrown) {
       console.log("Error: " + errorThrown + ": " + response.responseText);
       alert("Error: " + errorThrown + ": " + response.responseText);
+    }).always(function() {
+      ladda.stop();
     });
   } else {
     //nothing checked, unload chart
